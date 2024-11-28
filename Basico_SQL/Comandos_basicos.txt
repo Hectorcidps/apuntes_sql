@@ -1,0 +1,37 @@
+### Aliasing - alias ###
+Renombrar columnas o asignar un codigo de consulta. 
+
+Sintaxis:
+SELECT columna1 AS nombre_columna1
+FROM tabla;
+
+Sin embargo el alias se aplicara solo a las columnas seleccionadas antes de AS 
+
+si ocurre lo siguiente: 
+SELECT columna1 AS nombre_columna1, columna2
+FROM tabla;
+
+el nombre_columna1 solo se aplica para la columna1 ya que solo se pidio esa columna antes del AS y por lo tanto la columna2 tendra el mismo 
+nombre con el que aparece en la tabla original. 
+
+### DISTINCT ###
+Muestra los valores unicos de las columnas, se utiliza despues de SELECT
+
+Sintaxis:
+SELECT DISTINCT columna1, columna2
+FROM tabla; 
+
+### VIEW ### 
+Es una tabla virtual y se puede utilizar para guardar los conjutos de consultas para despues volver a utilizarlo, los datos contenidos en 
+una vista NO se guardan en la base de datos, mas bien lo que se almacena es el codigo de consulta, cada vez que se revisa la vista esta se actualiza
+automaticamente y trae los datos actualizados en la base de datos.
+
+Sintaxis: 
+CREATE VIEW nombre_de_la_vista AS   --> (AS asigna los resultados de la consulta al nombre de la vista)
+SELECT columna1, columna2, .... columna_n
+FROM tabla;
+
+Al crear una vista esta NO arroja los datos como una consulta normal. Lo que se debe hacer es hacer una consulta nueva pero usando la vista en FROM
+Sintaxis:
+SELECT columna1, columna2
+FROM nombre_de_la_vista; 
