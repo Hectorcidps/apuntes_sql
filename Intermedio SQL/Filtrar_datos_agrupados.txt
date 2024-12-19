@@ -1,0 +1,50 @@
+En SQL no se pueden filtrar funciones agg en clausulas WHERE, si necesitamos filtrar los datos por el resultado de una de ellas es necesario 
+hacer uso de HAVING
+
+### HAVING - no puede hacer uso de alias por que se ejecuta antes del SELECT ###
+
+- Filtrar datos agrupados puede ser especialmente útil cuando se trabaja con un conjunto de datos grande. Cuando trabajes con miles o incluso 
+millones de filas, HAVING te permitirá filtrar solo por el grupo de datos que desees. 
+
+Sintaxis:
+-- esta consulta muestra los años en los que se estrenaron mas de 10 peliculas -- 
+SELECT 
+    release_year COUNT(title) AS title_count
+FROM 
+    films 
+GROUP BY
+    release_year
+HAVING
+    COUNT(title ) > 10;
+
+
+
+## Ejemplo con where y having 
+
+SELECT 
+    certification,
+    COUNT(title) AS title_count
+FROM 
+    films 
+WHERE
+    certification IN ('G', 'PG, 'PG-13') ## WHERE filtra registros individuales
+GROUP BY
+    certification
+HAVING
+    COUNT(title ) > 500  ## HAVING filtra registros agrupados 
+ORDER BY
+    title_count DESC
+LIMIT 
+    3;
+
+
+
+###### Orden de ejecucion #######
+
+Paso 1: FROM
+Paso 2: WHERE
+Paso 3: GROUP BY
+Paso 4: HAVING
+Paso 5: SELECT
+Paso 6: ORDER BY 
+Paso 7: LIMIT

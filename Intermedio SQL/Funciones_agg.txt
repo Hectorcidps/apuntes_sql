@@ -1,0 +1,59 @@
+### Funciones de Agregacion ###
+
+-- Una funcion agregada hace un calculo sobre ciertos valores y devuelve un unico valor. 
+Las funciones VAN EN SELECT, Al usar las funciones de Agregacion estas le dan el alias de la que se use al resultado, como buena practica siempre
+hay que nombrar el resultado que vamos a consultar. 
+
+### AVG ()- Media o promedio Solo valores NUMERICOS ###
+
+Sintaxis : 
+
+SELECT 
+    AVG(columna1)
+FROM
+    tabla ; 
+
+
+### SUM () suma todos los valores del campo - Solo valores NUMERICOS ###
+
+Sintaxis: 
+
+SELECT 
+    SUM(columna1)
+FROM
+    tabla ; 
+
+
+### MIN () muestra el valor minimo del campo -  Valores NUMERICOS Y NO NUMERICOS ###
+
+Si son strings mostrara el valor con A, si son dates mostrara la fecha de inicio 
+
+Sintaxis: 
+
+SELECT 
+    MIN(columna1)
+FROM
+    tabla ; 
+
+
+### MAX () muestra el valor maximo del campo - Valores NUMERICOS Y NO NUMERICOS ###
+
+Si son strings mostrara el valor con Z, si son dates mostrara la fecha del final 
+
+Sintaxis: 
+
+SELECT 
+    MAX(columna1)
+FROM
+    tabla ; 
+
+
+### COUNT () cuenta los valores del campo - Valores NUMERICOS Y NO NUMERICOS ###
+
+Sintaxis: 
+
+SELECT 
+    COUNT(columna1)
+FROM
+    tabla ; 
+

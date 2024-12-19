@@ -1,0 +1,51 @@
+### ORDER BY ### 
+Ordena los datos de menor a mayor o de la A a la Z por default, Podemos ordenar por cualquier columna aunque esta NO este en SELECT, como buena practica
+INCLUIR el campo por el cual estamos seleccionando, dara mayor legibilidad a la consulta. 
+
+-- >  Se puede usar ORDER BY para multiples campos, los campos pueden tener distinto Orden, es decir, el primero puede ser ASC y el segundo DESC < --
+
+Sintaxis: 
+
+SELECT 
+    columna1,
+    columna2
+FROM 
+    tabla 
+ORDER BY
+    columna1 ASC o DESC; 
+
+Al aplicarlo solo no tenemos control de los valores ausentes por lo cual seria correcto agregar un WHERE con IS NOT NULL para filtrar los valores ausentes
+
+SELECT 
+    columna1,
+    columna2
+FROM 
+    tabla 
+WHERE 
+    columna 2 IS NOT NULL
+ORDER BY
+    columna2 ASC o DESC; 
+
+
+## ORDER BY Multiples campos ##
+Esto se usa cuando el primer campo ordenado NO nos muestra una diferencia certera de cual va primero, es decir, muestra un empate entre varias filas
+por lo cual aplicar un segundo ordenamiento nos dara un desempate. 
+
+SELECT 
+    columna1,
+    columna2
+FROM 
+    tabla 
+ORDER BY
+    columna1 DESC, columna2 DESC; 
+
+# consulta con distintos ordenamientos 
+
+Sintaxis:
+SELECT 
+    columna1,
+    columna2
+FROM 
+    tabla 
+ORDER BY
+    columna1, columna2 DESC;   -> en este caso no se pone ASC debido a que este parametro esta establecido por default 

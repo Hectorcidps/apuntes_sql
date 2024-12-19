@@ -1,0 +1,53 @@
+### GROUP BY ###
+
+--> solo 1 campo 
+Se suele usar con funciones de agregacion para mostrar estadisticas de resumen 
+
+Sintaxis: 
+
+SELECT 
+    columna1, Funcion agg(columna2) AS nombre_resultado
+FROM 
+    tabla 
+GROUP BY 
+    columna1; 
+
+Si en el segundo campo no se declara una funcion de agregacion arrojara un error. 
+
+
+-- > multiples campos 
+El modo en que se declaran los campos afecta al orden en el que se agrupan los datos 
+
+Sintaxis: 
+
+SELECT 
+    columna1, columna2, Funcion agg(columna3) AS nombre_resultado
+FROM 
+    tabla 
+GROUP BY 
+    columna1, columna2; 
+
+
+### GROUP BY con ORDER BY ###
+
+--> ordena los datos de la funcion de agregacion usando el alias del resultado < --
+
+Sintaxis: 
+
+SELECT 
+    columna1, Funcion agg(columna2) AS nombre_resultado
+FROM 
+    tabla 
+GROUP BY 
+    columna1
+ORDER BY
+    nombre_resultado ASC o DESC; 
+
+
+###### Orden de ejecucion #######
+
+Paso 1: FROM
+Paso 2: GROUP BY
+Paso 3: SELECT
+Paso 4: ORDER BY 
+Paso 5: LIMIT

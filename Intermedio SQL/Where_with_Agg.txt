@@ -1,0 +1,56 @@
+### usar WHERE con funciones de agregacion ###
+
+SELECT  
+    AVG(columna1) AS nombre_del_resultado
+FROM
+    tabla 
+WHERE 
+    columna1 (operador logico) x_valor; 
+
+--> al usar esto lo que esta dentro de WHERE se ejectua primero que el SELECT, es decir, primero filtra y luego hace la operacion < ---
+
+## En esta consulta primero filtra las peliculas con un año de lanzamiento iguales a 2010 y de ese resultado suma el presupuesto ## 
+
+SELECT  
+    SUM(presupuesto) AS nombre_del_resultado
+FROM
+    films
+WHERE 
+    año de lanzamiento =  2010; 
+
+
+
+### Funcion ROUND() ### 
+Redondea los resultados de las funciones de agregacion, este recibe dos parametros, el numero a redondear y los decimales que se desean mostrar, 
+Solo se puede usar con campos numericos.
+
+Sintaxis: primero se coloca ROUND, dentro del parentesis realizas una funcion de agregacion, eliges la columna y despues el numero de decimales 
+a mostrar.
+
+SELECT  
+    ROUND(AVG(presupuesto), numero_decimales) AS nombre_del_resultado
+FROM
+    films
+WHERE 
+    año de lanzamiento =  2010; 
+
+
+--- > Si se quiere mostrar un numero entero basta con dejar el segundo parametro sin argumento o colocar un 0 < ---
+
+SELECT  
+    ROUND(AVG(presupuesto)) AS nombre_del_resultado
+FROM
+    films
+WHERE 
+    año de lanzamiento =  2010; 
+
+--- Esta consulta da un resultado entero --- 
+
+-- >  Tambien se pueden usar valores negativos, estos redondean a la izquierda de la coma decimal en lugar de a la derecha < --
+
+SELECT  
+    ROUND(AVG(presupuesto), - x_numero) AS nombre_del_resultado
+FROM
+    films
+WHERE 
+    año de lanzamiento =  2010; 

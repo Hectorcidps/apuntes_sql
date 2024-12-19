@@ -1,0 +1,49 @@
+### Filtrar datos con valores nulos ###
+
+Los valores nulos son por error humano, la informacion no esta disponible o por que son desconocidos.
+
+### IS NULL ### 
+Nos muestra los registros (filas) que tienen valores nulos 
+
+Sintaxis: 
+SELECT 
+    columna1
+FROM
+    tabla 
+WHERE 
+    columna1 IS NULL; 
+
+# contar los valores que tienen valores ausentes 
+
+Sintaxis: 
+SELECT 
+    COUNT(*) AS no_datos
+FROM
+    tabla 
+WHERE 
+    columna1 IS NULL;
+
+
+
+### IS NOT NULL ###
+Nos muestra los registros que cuentan con datos completos, es decir, no tiene valores ausentes.
+
+Sintaxis: 
+SELECT 
+    COUNT(columna1) AS no_datos
+FROM
+    tabla 
+WHERE 
+    columna1 IS NOT NULL;
+
+### Si se aplica esta forma se obtendra el MISMO resultado que usando WHERE con IS NOT NULL, ya que ambos cuentan los valores completos ###
+
+Sintaxis:
+
+SELECT 
+    COUNT(columna1) AS no_datos
+FROM
+    tabla;
+
+
+---- > Estos dos comandos ayudan a identificar, seleccionar y excluir valores ausentes < -----

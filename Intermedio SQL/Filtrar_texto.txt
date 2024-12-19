@@ -1,0 +1,85 @@
+### filtrando texto con los operadores LIKE, NOT LIKE, e IN ### 
+
+## LIKE ##
+usar like con where para buscar un patron en un campo (columna), se utilizan dos comodines como marcador de posicion de los valores
+--- > IMPORTANTE SE PUEDE COLOCAR EN CUALQUIER PARTE SOLO DEBE ESPECIFICAR: < ---
+
+Comodin 1:
+% -  funciona con cero, uno o mas caracteres 
+
+---> EL EJEMPLO ANTERIOR DA COMO RESULTADO TODOS AQUELLOS REGISTROS QUE INICIEN CON 'HEC' < ----
+Sintaxis: 
+
+SELECT 
+    columna 1
+FROM 
+    tabla
+WHERE
+   columna1 LIKE 'Hec%'; (lo que esta despues de like es un ejemplo)
+
+
+Salida en la tabla :
+|    name    |
+| -----------|
+| Hector Cid |
+
+---- > ESTE EJEMPLO MUESTRA TODOS LOS REGISTROS QUE TERMINEN CON 'R' < ------
+SELECT 
+    columna 1
+FROM 
+    tabla
+WHERE
+   columna1 LIKE '%r'; 
+
+comodin 2:
+_(guion bajo) - funciona solo con caracteres sencillos 
+
+---- > ESTA CONSULTA MUESTRA TODOS LOS NOMBRES QUE EMPIECEN CON 'HE' < -----
+Sintaxis: 
+
+SELECT 
+    columna 1
+FROM 
+    tabla
+WHERE
+   columna1 LIKE 'He_%'; (lo que esta despues de like es un ejemplo)
+
+Salida en la tabla :
+|  name   |
+| --------|
+| Hector  |
+
+------ > ESTA CONSULTA MUESTRA TODOS LOS REGISTROS QUE TENGAN UNA 'T' EN EL TERCER CARACTER < ----
+SELECT 
+    columna 1
+FROM 
+    tabla
+WHERE
+   columna1 LIKE '_ _t%'; ( los guiones bajos estan separados para observar bien la sintaxis)
+
+
+### NOT LIKE ###
+Se usa para encontrar patrones que no cuentan con los caracteres elegidos ( esta operacion distingue entre mayusculas y minusculas)
+
+----- >  ESTA CONSULTA MUESTRA LOS NOMBRES DE LAS PERSONAS QUE NO EMPIECEN CON A. < ------
+Sintaxis: 
+
+SELECT 
+    columna 1
+FROM 
+    tabla
+WHERE
+   columna1 NOT LIKE 'A.%'; (lo que esta despues de like es un ejemplo)
+
+
+### IN ###
+Este operador nos permite agregar o especificar varios valores, creando varias clausulas OR, que queramos consultar dentro de un campo
+
+Sintaxis: 
+
+SELECT 
+    columna 1
+FROM 
+    tabla
+WHERE
+   columna1 IN (opcion1, opcion2, opcion3) ( esto es un OR abreviado)

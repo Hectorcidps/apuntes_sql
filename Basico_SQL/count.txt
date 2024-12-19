@@ -1,0 +1,28 @@
+# comando COUNT()
+-- > cuenta el numero de registros(fila) con valores en un campo(columna). COUNT cuenta todo, INCLUYENDO los duplicados 
+
+Sintaxis:
+SELECT COUNT(columna) AS nombre_del_conteo
+FROM tabla; 
+
+### COUNT con multiples campos ###
+-- > se debe utilizar count en cada consulta, si se necesitan 3 conteos se usan 3 COUNT
+
+Sintaxis:
+SELECT COUNT(columna1) AS nombre_del_conteo1, COUNT(columna2) AS nombre_columna2
+FROM tabla;
+
+### COUNT(*) con todos los campo ###
+--> cuenta todos los registros en la tabla, * representa todos los campos  
+
+Sintaxis:
+SELECT COUNT(*) AS nombre_del_conteo
+FROM tabla; 
+
+### Utilizar COUNT con DISTINCT ###
+--> contar los valores unicos de un campo(columna), si el DISTINCT se hace afuera primero elige los valores unicos y luego los cuenta, y el objetivo
+es contar los valores unicos de una columna, por eso va dentro del parentesis 
+
+Sintaxis:
+SELECT COUNT(DISTINCT columna) AS nombre_del_conteo
+FROM films;

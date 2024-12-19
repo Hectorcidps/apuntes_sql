@@ -1,0 +1,51 @@
+### INNER JOIN ### 
+
+INNER JOIN busca valores iguales en ambas tablas a traves de la llave primaria o identificador unico. Esta union interna SOLO elige aquellos valores
+del identificador unico iguales, los demas son ignorados. 
+
+Sintaxis: 
+SELECT
+    table1.column_name, table2.column_name
+FROM
+    table1  o tabla izquierda
+INNER JOIN
+    table2 o tabla derecha
+    ON table1.column_name = table2.column_name;
+
+--- Si las columnas que van a ser usadas en la union tienen el mismo nombre se debe usar la sintaxis table.column_name, para que no existan errores 
+en SQL ---
+
+Sintaxis: 
+
+SELECT
+    table1.column_name, table2.column_name
+FROM
+    table1  o izquierda AS nombre_abreviado1
+INNER JOIN 
+    table2 AS nombre_abreviado2
+    ON  nombre_abreviado1.column_name = nombre_abreviado2.column_name;
+
+--- NOTA SI SE USAN ABREVIACIONES ES NECESARIO CAMBIARLO EN SELECT, POR LA FORMA DE EJECUCION DEL CODIGO, ES DECIR, PRIMERO SE APLICAN LOS ALIAS 
+DE FROM E INNER Y AL ULTIMO SE APLICA EL SELECT --- 
+
+# ejemplo: 
+
+SELECT
+    nombre_abreviado1.column_name, nombre_abreviado2.column_name
+FROM
+    table1  o izquierda AS nombre_abreviado1
+INNER JOIN 
+    table2 AS nombre_abreviado2
+    ON  nombre_abreviado1.column_name = nombre_abreviado2.column_name;
+
+
+
+### UNIR COLUMNAS CON INNER JOIN Y USING ###
+
+SELECT
+    nombre_abreviado1.column_name, nombre_abreviado2.column_name
+FROM
+    table1 o tabla izquierda AS nombre_abreviado1
+INNER JOIN 
+    table2 o tabla derecha AS nombre_abreviado2
+USING(columna que comparten o campo de union en ambas tablas)

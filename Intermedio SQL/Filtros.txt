@@ -1,0 +1,101 @@
+### WHERE ###
+--> se utiliza para centrarnos en datos relevantes utilizando operadores logicos
+< - menor que
+> - mayor que 
+= - igualdad
+<= - menor o igual que 
+>= - mayor o igual que 
+<> - no igual a (todos los datos excepto este dato)
+
+Sintaxis: 
+WHERE columna operador_logico 
+WHERE release_year <> 1960 (todas las peliculas estrenadas menos esta fecha)
+
+###m Orden de ejecucion ###
+FROM > WHERE > SELECT > LIMIT 
+
+logica: abre el armario (FROM), buscas los abrigos verdes(WHERE), tomas los abrigos (SELECT), solo puedes llevar 5 (LIMIT)
+
+# ejemplos filtrando texto
+-- Count the Spanish-language films
+SELECT 
+    COUNT(language) AS count_spanish
+FROM
+    films
+WHERE 
+    language = 'Spanish';
+
+
+### Or Operator ###
+Multiples condiciones con Where, es un operador logico que permite agregar dos condiciones y basta con que una de ellas sea verdadera
+Sintaxis:
+
+SELECT 
+    columna 
+FROM
+    tabla
+WHERE 
+    columna1 (operador logico < > = >=, etc...) valor 
+    OR columna1 (operador logico < > = >=, etc...) valor ; 
+
+---- > Siempre especificar para cada operador el campo (columna) < -----
+
+### AND Operator ### 
+Multiples condiciones con Where, es un operador logico que permite agregar dos condiciones las DOS condiciones deben de ser verdaderas Sino surgira un 
+error
+
+Sintaxis:
+
+SELECT 
+    columna 
+FROM
+    tabla
+WHERE 
+    columna1 (operador logico < > = >=, etc...) valor 
+    AND columna1 (operador logico < > = >=, etc...) valor ; 
+
+
+### combinar AND - OR ### 
+Se pueden combinar las dos clausulas para filtrar DOS o mas campos (columnas) pero se deben encerrar entre parentesis para su correcta ejecucion.
+
+Sintaxis: 
+
+SELECT 
+    columna 
+FROM
+    tabla
+WHERE 
+    (columna1 = 1994 OR columna1 = 1995) 
+    AND (columna2 = "Amarillo" OR columna2 = "Verde"); 
+
+
+### BETWEEN -  AND ### 
+Comando para establecer rangos de cualquier tipo de valor, ya sean numéricos, alfanuméricos o fechas 
+
+Sintaxis:
+SELECT 
+    columna 
+FROM
+    tabla
+WHERE 
+    columna1 
+    BETWEEN valor inicial AND valor final 
+
+Tambien se pueden usar operadores logicos, por ejemplo: 
+
+SELECT 
+    *
+FROM 
+    productos
+WHERE
+     precio > 100 AND precio < 500;
+
+
+# ejemplo con 2 AND
+SELECT 
+    columna 
+FROM
+    tabla
+WHERE 
+    columna1 
+BETWEEN 1994 AND 2000 AND columna2 = "Azul";

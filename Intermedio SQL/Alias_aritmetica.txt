@@ -1,0 +1,33 @@
+### Operaciones basicas con aritmetica ###
+
++ suma 
+- resta  
+* multiplicacion
+/ division 
+
+Deben ir encerradas con parentesis cuando son mas de un calculo. Cuando es solo un calculo no es obligatorio que vaya de esta manera sin embargo le da
+mejor vision al codigo.
+Si se divide numero entero entre numero entero obtendremos como resultado un numero entero, esto sucede de la misma forma con los  numeros flotantes
+
+#### Principal diferencia entre ARITMETICA Y LAS FUNCIONES DE AGREGACION #### 
+
+Las funciones de agregacion realizan el calculo en todo el campo (columna) mientras que las funciones de aritmetica lo hace en los registros (filas)
+
+# ejemplo - al usar la aritmetica es necesario nombrar el resultado ya que por default nos da una el siguiente resultado ?column? 
+
+Sintaxis: 
+
+SELECT
+    (columna1 - columna2) AS nombre_resultado 
+FROM 
+    tabla; 
+
+
+### orden de ejecucion ### 
+
+step 1 - FROM 
+step 2 - WHERE
+step 3 - SELECT (alias definido)
+step 4 - LIMIT 
+
+Sin embargo, se podria pensar que se puede usar el alias en SELECT pero esto no es posible debido al orden de ejecucion del codigo. 

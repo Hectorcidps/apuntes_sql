@@ -1,0 +1,32 @@
+FROM es la primer linea que se ejecuta, ya que ahi se selecciona la informacion de la tabla 
+
+SELECT despues se hace la seleccion de datos 
+
+refinar resultados 
+WHERE 
+GROUP BY 
+LIMIT 
+etc ... 
+
+
+## Debugging SQL 
+perhaps you meant to reference the field --- > error al seleccionar el campo(columna)
+
+# otros errores 
+* Final note on errors
+    Mispelling
+    incorrect capitalization
+    incorrect or missing punctuation 
+comma errors -> menos util (revisar el codigo para encontrar el error)
+keyworkd erros --> selecciona si una plabra clave o reservada esta mal escrita 
+ 
+
+#### BUENAS PRACTICAS #### 
+-- > formato 
+- palabras reservadas siempre en mayusculas 
+- revisar la style guides para escribir mejor el codigo 
+- punto y coma al final de cada consulta (en postgrestSQL y mySQL es innecesario) pero es best practice
+    se puede usar en otro editor de codigo fuente 
+    indica finalizacion de una consulta 
+
+- uso de guiones bajos en los nombres de las tablas, alias etc. 

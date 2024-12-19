@@ -15,7 +15,7 @@ el nombre_columna1 solo se aplica para la columna1 ya que solo se pidio esa colu
 nombre con el que aparece en la tabla original. 
 
 ### DISTINCT ###
-Muestra los valores unicos de las columnas, se utiliza despues de SELECT
+Muestra los valores unicos de las columnas (elimina los valores duplicados), se utiliza despues de SELECT
 
 Sintaxis:
 SELECT DISTINCT columna1, columna2
@@ -31,7 +31,13 @@ CREATE VIEW nombre_de_la_vista AS   --> (AS asigna los resultados de la consulta
 SELECT columna1, columna2, .... columna_n
 FROM tabla;
 
+## ejemplo
+CREATE VIEW recent_orders AS
+SELECT order_id, customer_id, order_date, total_amount
+FROM orders
+WHERE order_date > '2023-01-01';
+
 Al crear una vista esta NO arroja los datos como una consulta normal. Lo que se debe hacer es hacer una consulta nueva pero usando la vista en FROM
 Sintaxis:
 SELECT columna1, columna2
-FROM nombre_de_la_vista; 
+FROM nombre_de_la_vista;
