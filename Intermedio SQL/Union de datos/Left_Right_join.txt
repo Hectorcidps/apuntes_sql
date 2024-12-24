@@ -1,0 +1,56 @@
+### Uniones externas -  pueden obtener los registros de otras tablas incluso si no hay coincidencias para el campo que se esta uniendo ## 
+
+### LEFT JOIN ###
+
+-- > devuelve todos los registros en la tabla de la izquierda y los registros de la tabla de la derecha que coincidan con el campo de union
+los registros que no tengan coincidencia tendran valores null < --- 
+
+Sintaxis: 
+
+SELECT
+    nombre_abreviado1.column_name, nombre_abreviado2.column_name
+FROM
+    table1 o tabla izquierda AS nombre_abreviado1
+LEFT JOIN 
+    table2 o tabla derecha AS nombre_abreviado2
+    ON  nombre_abreviado1.column_name = nombre_abreviado2.column_name;
+
+Sintaxis (con USING):
+
+SELECT
+    nombre_abreviado1.column_name, nombre_abreviado2.column_name
+FROM
+    table1  o izquierda AS nombre_abreviado1
+LEFT JOIN 
+    table2 o derecha AS nombre_abreviado2
+USING(columna_de_union)
+
+
+
+
+### RIGHT JOIN ###
+ESu uso es menos comun que LEFT JOIN, este tipo de union muestra todos los registros de la tabla de la derecha y los registros de la izquierda que 
+coinciden con el campo de union son mostrados. Se utiliza la misma sintaxis es decir, primero la tabla de la izquierda y luego la derecha, 
+la clausula RIGHT es quien da el sentido de la union(JOIN). 
+
+SELECT
+    nombre_abreviado1.column_name, nombre_abreviado2.column_name
+FROM
+    table1 o tabla izquierda AS nombre_abreviado1
+LEFT JOIN 
+    table2 o tabla derecha AS nombre_abreviado2
+    ON  nombre_abreviado1.column_name = nombre_abreviado2.column_name;
+
+
+
+
+### FULL JOIN ### 
+Como su nombre lo indica une todos los registros de las dos tablas, independientemente si hacen o no coincidencia con el campo seleccionado. 
+
+SELECT
+    nombre_abreviado1.column_name, nombre_abreviado2.column_name
+FROM
+    table1 o izquierda AS nombre_abreviado1
+FULL JOIN 
+    table2 o derecha AS nombre_abreviado2
+USING(columna_de_union)

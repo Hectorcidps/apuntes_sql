@@ -1,0 +1,17 @@
+### CASE ### 
+Las declaraciones CASE son la version de SQL de una funcion IF(si) THEN(entonces) ELSE. Comparar resultados separados en un solo conjunto de datos.
+Tambien permite crear categorias para los datos 
+
+Las declaraciones tienen 3 partes: una clausula WHEN, una clausula THEN y una clausula ELSE y terminan con END 
+
+Sintaxis: 
+
+SELECT 
+    CASE WHEN x = 1 THEN 'a'
+        WHEN x = 2 THEN 'b'
+        ELSE 'c' END AS nombre_resultado 
+
+Explicacion: WHEN prueba una condicion dada en este caso x = 1 cuando esto es VERDADERO  THEN(entonces) devuelve el elemento especificado, es decir,
+'a', se pueden agregar mas de una condicion, la instruccion CASE finaliza con una clausula ELSE devuelve un valor especificado si TODAS las 
+declaraciones anteriores no SON VERDADERAS. 
+-- > Siempre agregar un alias al usar CASE. < --

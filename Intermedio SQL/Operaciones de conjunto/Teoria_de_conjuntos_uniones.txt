@@ -1,0 +1,80 @@
+#### En SQL existen 3 tipos de uniones UNION, UNION ALL, INTERSECT y EXCEPT 
+
+## Estas uniones NO comparan ni fusionan los registros, solo los apilan, por lo cual deben tener el MISMO numero de columnas, mientras que 
+los tipos de datos deben de ser iguales, no podemos aplilar datos numericos con strings.
+
+Resultado:  solo se mostrara el nombre del campo de la tabla izquierda o el alias de la misma ##
+
+--- UNION: toma las dos tablas como entrada y retorna todos los registros de ambas tablas, SI dos registros son iguales solo se mostrara 1 
+Sintaxis:
+
+SELECT 
+    *
+FROM
+    left_table
+UNION 
+SELECT 
+    *
+FROM
+    right_table; 
+
+--- UNION ALL: toma las dos tablas como entrada y retorna todos los registros de ambas tablas, incluyendo los valores duplicados 
+Sintaxis:
+
+SELECT 
+    *
+FROM
+    left_table
+UNION ALL 
+SELECT 
+    *
+FROM
+    right_table; 
+
+
+
+--- INTERSECT: Toma dos tablas como entrada y devuelve solo los registros que exiten en ambas tablas, los demas registros no son mostrados. 
+Los tipos de datos deben de ser iguales, no podemos aplilar datos numericos con strings. Las columnas deben tener el mismo largo para que se hagan 
+las comparaciones. 
+-- >  La diferencia con un INNER JOIN es que este devuelve valores duplicados, miestras que INTERSECT solo muestra el registro una vez. Esto depende
+si hay dos registros similares en ambas tablas. 
+
+Sintaxis:
+
+SELECT 
+    *
+FROM
+    left_table
+INTERSECT
+SELECT 
+    *
+FROM
+    right_table;
+
+## INTERSECT con dos Campos (columnas) ##
+Si los campos seleccionados no coinciden con los de la derecha, nos arrojara una tabla vacia. 
+
+SELECT 
+    column1, column2 AS nombre_resultado
+FROM
+    left_table
+INTERSECT
+SELECT 
+    column1, column2
+FROM
+    right_table;
+
+
+
+--- EXCEPT: Permite identificar los registros que estan presentes en una tabla, pero no en la otra. Conserva los registros COMPLETOS de la tabla de la 
+izquierda que NO estan presentes en la tabla de la derecha. 
+
+SELECT 
+    column1, column2 
+FROM
+    left_table
+EXCEPT
+SELECT 
+    column1, column2
+FROM
+    right_table;

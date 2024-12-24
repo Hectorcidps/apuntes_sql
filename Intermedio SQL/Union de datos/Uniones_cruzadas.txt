@@ -1,0 +1,36 @@
+### Tablas Cruzadas ###
+Crean todas las posibles combinaciones de 2 tablas
+
+por ejemplo se tienen dos tablas 
+
+table 1     table 2 
+id           id  
+1            A  
+2            B  
+3            C 
+
+Resultado de las tablas cruzadas: 
+
+id1     1d2 
+1       A
+1       B  
+1       C
+2       A
+2       B  
+2       C
+3       A
+3       B  
+3       C
+
+
+Sintaxis: 
+No se utiliza ON o USING pero se puede usar WHERE para filtrar datos
+
+SELECT 
+    column1, column2
+FROM 
+    table1 
+CROSS JOIN table2;  
+WHERE 
+    table1.column_name IN('x_valor')
+    AND, OR o NOT table2.column2 IN ('x_valor') ;

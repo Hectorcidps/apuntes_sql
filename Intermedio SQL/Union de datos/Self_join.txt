@@ -1,0 +1,16 @@
+### Autouniones ###
+Las autouniones son tablas que se unen consigo misma, se usan para comparar partes de una misma tabla  
+
+-- No tienen una sintaxis especifica, se necesitan usas Alias para usarlas --
+
+Sintaxis: 
+
+SELECT
+    nombre_abreviado1 AS nombre_mostrado,
+    nombre_abreviado2 AS nombre_mostrado
+FROM
+    tabla1 AS nombre_abreviado1 
+INNER JOIN tabla1 AS nombre_abreviado2
+    ON nombre_abreviado1.column = nombre_abreviado2.column; 
+
+Se usa la misma tabla pero se asignan Alias para poder unir las columnas que se desean 

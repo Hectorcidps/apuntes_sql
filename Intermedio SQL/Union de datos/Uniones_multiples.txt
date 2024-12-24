@@ -1,0 +1,29 @@
+### Uniones Multiples ### 
+Hacer varias uniones y aplicarlas en una sola consulta
+
+## INNER JOIN ## 
+
+-- esta consulta une la tabla izquierda con la derecha y luego une otra tabla con el resultado anterior 
+
+SELECT 
+    *
+FROM
+    left_table 
+INNER JOIN 
+    right_table
+    ON left_table.column = right_table.column
+INNER JOIN 
+    another_table ON  left_table.column = another_table.column;
+
+
+## union con mutiples keys ## 
+
+-- Esta consulta limita los resultados de la union agregando un campo extra usando AND (esta va en la clausula ON)
+
+SELECT 
+    *
+FROM
+    left_table 
+INNER JOIN 
+    right_table ON left_table.column = right_table.column
+    AND left_table.column2 = right_table.column2

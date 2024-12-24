@@ -1,0 +1,49 @@
+### Subconsultas dentro de WHERE y SELECT ### 
+
+--- Subqueries en WHERE --- 
+Las subconsultas son las mas comunes en la clausula WHERE 
+
+Sintaxis generica: 
+
+SELECT
+    column_n ... 
+FROM 
+    table 
+WHERE
+    campos IN (subquery aqui) -- La subconsulta es un argumento para el operador IN 
+
+NOTA: Esto funcionara solo SI los dos campos tienen el mismo tipo de dato, las subconsultas pueden ser de la MISMA tabla o de ALGUNA DIFERENTE 
+
+-- Sintaxis: 
+
+SELECT
+    column_n ... 
+FROM 
+    table 
+WHERE
+    campos IN 
+    (SELECT 
+        column1, column2,... column_n
+    FROM
+        table2 
+    WHERE 
+        column1_table2 =,<,>,<> alguna_condicion);
+
+
+
+
+#### Subconsultas en SELECT ####
+
+- Segundo subconsulta mas implementada, mostrar informacion con funciones de agregacion 
+
+Ejemplo plataforma: 
+
+SELECT DISTINCT continent, 
+    (SELECT 
+        COUNT(*)
+    FROM 
+        monarchs
+    WHERE
+        states.continent = monarch.continent) AS monarch_count  
+FROM
+    states;

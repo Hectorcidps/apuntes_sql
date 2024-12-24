@@ -1,0 +1,47 @@
+### Subconsultas dentro de FROM ### 
+-- Las subconsultas en FROM pueden ayudar a seleccionar columnas de varias tablas en una sola consulta. -- 
+
+En la clausula FROM se puede incluir dos tables sin usar UNION 
+
+Sintaxis: 
+
+SELECT  
+    table1.column1, table2.column1
+FROM 
+    table1 (izquierda), table2 (derecha)
+WHERE 
+    table1.column1 = table2.column; 
+
+-- El resultado arroja valores duplicados cuando encuentra valores que coinciden entre las dos tablas (similar al UNION ALL) ---
+
+Una forma de eliminar duplicados es usando DISTINCT 
+
+Sintaxis: 
+
+SELECT DISTINCT
+    table1.column1, table2.column1
+FROM 
+    table1 (izquierda), table2 (derecha)
+WHERE 
+    table1.column1 = table2.column; 
+
+
+
+## Usar un subquery para obtener el mismo resultado que la consulta anterior 
+
+Sintaxis: 
+
+SELECT DISTINCT
+    table1.column1, tabla_resultado.nombre_resultado
+
+FROM table1 (izquierda),    <---  NO OLVIDAR LA COMAA
+    (SELECT
+    column1,
+    X_FUNCION_AGREGACION(column2) AS nombre_resultado
+    FROM 
+        table2
+    GROUP BY column1) AS tabla_resultado
+
+WHERE 
+    table1.column1 = tabla_resultado.column1
+ORDER BY column; 
