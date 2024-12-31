@@ -1,0 +1,167 @@
+### CASE ### 
+Las declaraciones CASE son la version de SQL de una funcion IF(si) THEN(entonces) ELSE. Comparar resultados separados en un solo conjunto de datos.
+Tambien permite crear categorias para los datos 
+
+Las declaraciones tienen 3 partes: una clausula WHEN, una clausula THEN y una clausula ELSE y terminan con END 
+
+Sintaxis: 
+
+SELECT 
+    CASE WHEN x = 1 THEN 'a'
+        WHEN x = 2 THEN 'b'
+        ELSE 'c' END AS nombre_resultado 
+
+Explicacion: WHEN prueba una condicion dada en este caso x = 1 cuando esto es VERDADERO  THEN(entonces) devuelve el elemento especificado, es decir,
+'a', se pueden agregar mas de una condicion, la instruccion CASE finaliza con una clausula ELSE devuelve un valor especificado si TODAS las 
+declaraciones anteriores no SON VERDADERAS. 
+-- > Siempre agregar un alias al usar CASE. < --
+
+
+
+### Multiples condiciones en CASE ###
+para realizar esto es necesario utilizar AND dentro de la clausula WHEN 
+
+SELECT 
+    column1, 
+    column2,
+    CASE WHEN x = 1 AND y = 2 THEN 'a'
+        WHEN x = 2 AND y =2 THEN 'b'
+        ELSE 'c' END AS nombre_resultado 
+FROM 
+    table 
+WHERE 
+    column1 = x_valor; 
+
+--- La clausula ELSE se aplica cuando las dos condiciones de arriba no se cu,mplen, ya que al tener AND necesariamente deben de ser TRUE, al no suceder 
+esto ELSE categoriza TODOS los partidos jugados por cualquiera que no cumpla con las dos primeras condiciones < --
+
+-- > Se pueden filtrar condiciones case reescribiendolas en WHERE pero sin incluir el alias: 
+
+SELECT 
+    column1, 
+    column2,
+    CASE WHEN x = 1 AND y = 2 THEN 'a'
+        WHEN x = 2 AND y =2 THEN 'b'
+        ELSE 'c' END AS nombre_resultado 
+FROM 
+    table 
+WHERE 
+    CASE WHEN x = 1 AND y = 2 THEN 'a'
+        WHEN x = 2 AND y =2 THEN 'b'
+        ELSE 'c' END IS NOT NULL;
+
+
+
+
+### CASE WHEN con funciones agregadas ### 
+-- se pueden usar para crear columnas para categorizar datos y filtrarlos en la clausula WHERE.
+-- se pueden usar para agregar datos en funcion del resultado de una prueba logica 
+
+
+>> CASE WHEN con COUNT <<
+Sintaxis:
+SELECT 
+    column1, 
+    column2,
+    COUNT(CASE WHEN x = 1 AND y = 2 THEN column END) AS nombre_resultado 
+FROM 
+    table 
+GROUP BY   
+    column1; 
+
+SQL cuenta el numero de filas devueltas por la sentencia CASE no importa si es un STRING, UN NUMERO, O CUALQUIER COLUMNA DE LA TABLA 
+
+
+
+>> CASE WHEN con SUM << 
+suma el total de una del resultado de CASE los valores deben ser numericos 
+
+SELECT 
+    column1, 
+    SUM(CASE WHEN x = 1 AND y = 2 THEN column_x END) AS nombre_resultado, 
+    SUM(CASE WHEN x = 1 AND y = 2 THEN column_y END) AS nombre_resultado 
+FROM 
+    table 
+GROUP BY   
+    column1; 
+
+
+
+>> CASE WHEN con AVG << 
+se puede usar de dos maneras clave: 
+
+1. obtener los promedios de valores 
+2. calcular porcentajes 
+
+SELECT 
+    column1, 
+    AVG(CASE WHEN x = 1 AND y = 2 THEN column_x END) AS nombre_resultado, 
+    AVG(CASE WHEN x = 1 AND y = 2 THEN column_y END) AS nombre_resultado 
+FROM 
+    table 
+GROUP BY   
+    column1;
+
+### redondear valores con la clausula ROUND -- > el numero de decimales va AL FINAL, despues de END no olvidar el SEGUNDO parentesis, despues de 
+END), x_numero_decimales) 
+
+SELECT 
+    column1, 
+    ROUND(AVG(CASE WHEN x = 1 AND y = 2 THEN column_x END), 2) AS nombre_resultado, 
+    ROUND(AVG(CASE WHEN x = 1 AND y = 2 THEN column_y END), 2) AS nombre_resultado 
+FROM 
+    table 
+GROUP BY   
+    column1; 
+
+
+## PORCENTAJES CON CASE Y AVG ## 
+
+Se excluye el ELSE para evitar NULLS 
+
+Sintaxis:
+
+SELECT 
+    column1, 
+    AVG(CASE WHEN x = 1 AND y = 2 THEN 1 
+            WHEN x = 1 AND y = 2 THEN 0 
+            END) AS nombre_resultado, 
+    AVG(CASE WHEN x = 1 AND y = 2 THEN 1 
+            WHEN x = 1 AND y = 2 THEN 0 
+            END) AS nombre_resultado 
+FROM 
+    table 
+GROUP BY   
+    column1;
+
+--- > porcentaje redondeado --- 
+
+SELECT 
+    column1, 
+    ROUND(AVG(CASE WHEN x = 1 AND y = 2 THEN 1 
+            WHEN x = 1 AND y = 2 THEN 0 
+            END), x_numero_decimales) AS nombre_resultado, 
+    ROUND(AVG(CASE WHEN x = 1 AND y = 2 THEN 1 
+            WHEN x = 1 AND y = 2 THEN 0 
+            END), x_numero_decimales) AS nombre_resultado
+FROM 
+    table 
+GROUP BY   
+    column1;
+
+
+EJEMPLO PLATAFORMA 
+
+SELECT 
+	c.name AS country,
+    -- Round the percentage of tied games to 2 decimal points
+	ROUND(AVG(CASE WHEN m.season='2013/2014' AND m.home_goal = m.away_goal THEN 1
+			 WHEN m.season='2013/2014' AND m.home_goal != m.away_goal THEN 0
+			 END),2) AS pct_ties_2013_2014,
+	ROUND(AVG(CASE WHEN m.season='2014/2015' AND m.home_goal = m.away_goal THEN 1
+			 WHEN m.season='2014/2015' AND m.home_goal != m.away_goal THEN 0
+			 END),2) AS pct_ties_2014_2015
+FROM country AS c
+LEFT JOIN matches AS m
+ON c.id = m.country_id
+GROUP BY country;
