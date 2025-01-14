@@ -1,0 +1,66 @@
+## Funcion ROUND ##
+redonde el numero al valor entero mas cercano, por defecto, pero esto no ocurre si se indica cuantos valores decimales se necesita.
+
+Sintaxis:
+=ROUND(B1,3) --> esto indica que el valor de la celda B1 deben agregarse 3 decimales. 
+
+=ROUND(A2, -2) -> redonde el numero al centenal mas cercano, es decir, si tengo 325 redonde a 300. si eligo -1 redonde en decenas, -3 en millares, ect, 
+
+
+## Resume estadistico ## 
+-- Medidas de frecuencia  medir los recuentos de valores, hace el calculo en las filas 
+    COUNT () -> cuenta el numero de celdas que contienen datos numericos, fechas y monedas en un rango especifico. NO cuenta texto ni celdas vacias. 
+    COUNTA() -> cuenta las celdas con cualquier tipo de datos incluyendo strings y errres. NO cuenta celdas vacias 
+    COUNTBLANK() -> SOLO cuenta celdas en blanco. 
+
+-- Medidas de centro, que tiene como objetivo descibrir un valor tipico
+    AVERAGE (Mean) -> promedio de los datos numericos, la suma de valores entre el total de ellos.
+    Median -> se ordenan los datos y se selecciona el numero de en medio
+
+-- Medidad de exploracion 
+    MAX () valor maximo de una columna, valores numericos 
+    MIN () valor minimo de una columna, valores numericos
+
+-- Medidas de dispersion, que tan dispersos estan los datos 
+
+
+
+### Valores filtrados y ordenados ### para seleccionar todo el largo de una columna basta poner de donde empieza y solo el nombre de la columna, 
+esto es mejor que poner el rango total ya que si se aumentan nuevas filas estas no se actualizan.
+
+Sintaxis:
+A2:A 
+A2:E --> selecciona de la columna A fila 2 hasta la E toda 
+
+-- UNIQUE() --> extrae los valores unicos de una columna 
+Sintaxis:
+=UNIQUE(column1)
+
+-- FILTER() filtra el rango de celdas segun una condicion (al menos 1)
+
+Sintaxis:
+=FILTER(column1, column2, condition)
+
+ejemplo:
+=FILTER(A2:A, B2:B, > 100-)
+
+Tambien se puede implementar para filtrar datos de una columna que tengan una condicion, por ejemplo:
+en la columna B se utilizo ISBLANK() esto arroja un valor booleano, en la fila A3 se quiere mostrar solo los valores TRUE o en blanco 
+se aplica la siguiente funcion: 
+
+=FILTER(rango a inspeccionar, rango con valores condicionales) o =FILTER(A2:B20, B2:B20) 
+
+
+
+-- SORT() ordena los datos de manera ascendente o descendente 
+Sintaxis:
+
+SORT(range, sort_column, is_ascending)
+    * range: rango de celdas a ordenar (1 o mas columnas)
+    * sort_column la columna por la cual se ordenara el rango DENTRO DEL RANGO SELECCIONADO  
+    * is_ascending True/False -> sin un argumento el default sera ascendente si se coloca False se ordenara descendentemente 
+
+Ejemplo:
+=SORT(A2:E, 2, FALSE)
+
+selecciona las columnas A2 hasta la E y ordena por la columna 2 o sea la B, de manera descendente. 

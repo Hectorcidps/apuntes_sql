@@ -1,0 +1,59 @@
+### Funciones logicas ### 
+
+NOT(column) -> NO es Verdadero, No es falso, devuelve lo contrario si el valor es True devuelve False y viceversa. 
+
+AND(column1, column2) -> TODAS las condiciones deben de ser verdaderas  
+
+OR(column1, column2) -> Al menos una de las condiciones es verdadera 
+
+ejemplos:
+
+OR(NOT(a2),b2) -> primero cambia los valores de a2, si es true lo hace false, despues revisa si alguna de las dos condiciones es TRUE. 
+
+AND(NOT(f3), e3) -> cambia el valor de f3 si es false a true y despues revisa que las dos condiciones sean TRUE sino devuelve FALSE 
+
+
+#### Flow Control ####
+Es la ejecucion de diferentes codigos en diferentes condiciones. Principio basico "Si ocurre alguna condicion, hacer algo, de lo contrario, 
+hacer esta otra cosa"
+
+IF(valor_logico, valor_TRUE, valor_FALSE) -> funcion de una UNICA CONDIDICION. se pueden anidar condiciones. 
+
+Sintaxis: 
+=IF(A2 >0, "positive","negative") -> esta condicion devolvera TRUE o FALSE segun el valor de A2
+
+ejemplo:
+=IF(AND(A2=TRUE, B2=TRUE), "mother_with_children","other")
+
+# IFS() acepta un numero arbitrario de condiciones a probar y devuelve el valor correspondiente a la primera condicion que se cumple, es decir, 
+la que es TRUE
+
+Sintaxis:
+
+tabla 
+A2 = TRUE 
+B2 = FALSE
+=IFS(A2, "1st", B2,"2nd") -> con base en la informacion de tabla la funcion devolvera 1st. Por que es la primer condicion que se cumple. 
+
+Si ninguna condicion es TRUE enotonces devuelve #N/A -> valor faltante 
+
+ejemplo:
+=IFS(E2, "young", NOT(D2), "none", AND(D2, NOT(E2)), "old") -> primero se verifica la condicion anidada, si no se cumple pasa a E2, si no se cumple
+pasa a D2. 
+
+## SWITCH() -> esta vinculada con IFS pero en lugar de hacer coincidir condiciones logicas, HACE COINCIDIR VALORES DE TEXTO. Es util para transformar
+variables categoricas.
+
+tabla:
+A          C 
+1st        1 
+2nd        2
+3rd        #N/A 
+
+=SWITCH(A2, "1st", 1, "2nd", 2) -> revisa los valores de texto de la tabla. Si coincide con "1st", el resultado en la columna C sera 1.
+
+ejemplos:
+
+=SWITCH(H2:H25, "none", FALSE, "young", TRUE, "old", TRUE) -> de la columna H se verifica el texto. 
+
+=SWITCH(H2:H25, "none",1,"young",2,"old",3)

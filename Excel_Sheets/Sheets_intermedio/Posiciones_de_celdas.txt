@@ -1,0 +1,43 @@
+### Direccion de celdas ###
+
+## ROW() -> direccion de la fila como un numero 
+Sintaxis:
+
+=ROW(A3) -> devuelve 3
+
+
+## COLUMN() -> direccion de la columna como un numero 
+Sintaxis:
+=COLUMN(F5) -> devuelve 6
+
+
+## ADDRESS() -> convertir numeros de fila y columna en direcciones en formato A1, esta funcion devuelve por default direcciones absolutas. 
+Sintaxis:
+
+=ADDRESS(B2, B3) -> devuelve $C$5
+=ADDRESS(B2, B3, 4) -> devuelve C5 sin la referencia absoluta 
+
+=ADDRESS(2, 1) -> devuelve $A$2 es decir, toma la fila 2 y la columna 1
+
+=ADDRESS(ROW(), 7) -> selecciona la fila actual y la columna 7 o G 
+
+## INDIRECT() -> en lugar de pasar un valor a una funcion, pasa una direccion
+Al a ver pasado la funcion ADDRESS antes, se toma la celda donde se almacena el resultado para devolver el valor de la direccion, es decir, A2. 
+
+=INDIRECT(C2) -> c2 por que ahi se almacena el valor de la funcion ADDRESS. Esto devuelve el valor de la direccion, es decir, A2. 
+
+
+## OFFSET () -> direccion relativa de otra celda, pasando la referencia de una celda, el numero de celdad a mover hacia abajo y el numero de celdad 
+de mover a la derecha. Considera cualquier rango. Se brinca la fila de referencia, es decir, si es A4, se brinca a A5 y B4, no se cuenta la referencia. 
+Sintaxis:
+
+=OFFSET(A2, 4, 1) -> de la celda A2, se mueve 5 filas abajo y 1 a la derecha, es decir, muestra el valor de B7 
+=OFFSET(C6, -3, -2) -> se mueve tres filas arriba y 2 a la izquierda, es decir, A3 
+
+
+
+## INDEX() -> recibe como primeros argumentos un rango absoluto, despues de ese rango agregar las posiciones de las celdas, primero fila y 
+luego columna. Cuenta desde la primer celda. SOLO toma en cuenta los datos del rango seleccionado, si sale de este se genera un error. 
+
+=INDEX($B$3:$C$7, 3, 1) -> baja 3 filas y de las columnas empieza al principio del rango en este caso A y se recorre a la derecha, es decir muestra 
+el valor de B5.  

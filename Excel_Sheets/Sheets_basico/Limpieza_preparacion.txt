@@ -1,0 +1,115 @@
+## Extrayendo fechas y componentes de tiempo ## 
+
+-- valores continuos: Representan mediciones. Pueden tomar cualquier valor dentro de un rango, incluyendo números decimales.
+-- valores discretos Representan conteos. Solo pueden tomar valores enteros.
+
+
+### FECHAS ###
+
+- year(column)
+
+- month(column) 
+
+    - se puede usar la funcion text para convertir datos numericos en diferentes formatos y mostrar el nombre del mes) 
+    =TEXT(number, format) / =TEXT(column, "mmm" o "mmmm")  ---> si se ponen 3 "m" el nombre del mes sera corto, si son 4 sera el nombre completo. 
+
+- weekday(column, type) -> devuelve el dia de la semana como un numero. En muchas culturas la semana empieza en domingo, sin embargo usando el argumento 
+type podemos especificar el primer dia de la semana y que numero debe representar  
+    =TEXT(number, format) / =TEXT(column, "ddd" o "dddd")  ---> si se ponen 3 "d" el nombre del dia es corto, si se ponen 4 "d" es largo. 
+
+Sintaxis: weekday(A2:A, 1) --> El lunes sera el inicio de semana. 
+
+-- algunas funciones mas de tiempo 
+* hour()
+* minute() 
+* second()
+
+
+### Calcular duraciones e intervalos ### 
+
+TODAY()  --> devuelve la fecha actual en mes-dia-anio, segun la zona horaria en sheets. NO ACEPTA ningun argumento pero el parentesis es obligatorio
+
+NOW() --> devuelve la fecha y hora actual con el segundo mas cercano al actual. 
+
+si restamos una fecha de otra  SIEMPRE obtendremos el intervalo de dias transcurridos de una fecha a otra 
+
+DATEDIF(fehca_inicio, fecha_fin, unidad "Y","M","D") --> se escoge cualquier unidad 
+SI se escoge year el valor devuelto sera redondeado, si es el mes 11 devolvera 0 
+
+Sintaxis 
+=DATEDIF(A2, TODAY(), "D") --> regresa los dias que han pasado desde la fecha de inicio hasta hoy 
+
+
+
+### Limpiando datos de texto ###
+Proper case -> cunado los nombres y las direcciones comienzan con mayusculas y siguen con minusculas hasta que exista una separacion o espacio. 
+
+- PROPER("nombre a ajustar") ajusta el formato al texto en una columna - devuelve "Hector Cid"
+- LOWER ("nombre a ajustar") las conviierte en minusculas 
+- UPPER ("nombre a ajustar") las convierte en mayusculas 
+
+expacios en blanco, tipos:
+* leading - spacio antes del texto 
+* trailing - espacio despues del texto 
+* repeated - mas de 1 espacio entre caracteres
+
+- TRIM("     NOMbre a ajust    a") devuelve el nombre correjido 
+
+
+-- UNIR TEXTOS con CONCATENATE(string1, string2)
+permite unir dos strings, devuelve las dos cadenas unidas, sin espacios 
+Sintaxis: 
+=CONCATENATE(A2," ",B2) -> devuelve las dos cadenas con un espacio en medio 
+
+
+### funciones anidadas ###
+-- una funcion se utiliza dentro de otra funcion, las funciones anidadas se evaluan de adentro hacia afuera 
+
+Crear correos con CONCATENATE
+=CONCATENATE(LOWER(A2),".",LOWER(B2),"@todito.com") -> de esta forma concatenamos y creamos un correo 
+
+
+
+### Manipulacion de datos de tipo texto ###
+
+--- Funciones que devuelven indice del texto buscado ----
+Sintaxis: 
+=LEN("texto") devuelve la longitud de los caracteres de una cadena, contando espacios, caracteres especiales, numero y letras
+
+
+# SEARCH
+Busqueda de patrones particulares de caracteres en una cadena.
+
+tiene 3 argumentos 
+search_for: cadena de texto a buscar 
+text_to_search: el texto a buscar 
+starting_at: indice donde comienza la busqueda, por defecto es uno (inicio del texto)
+
+ejemplo:
+
+=SEARCH("$", "code:  $")  -> esto devuelve la posicion en donde este la cadena buscada 
+
+
+--- Funciones que devuelven el texto ----
+ambas funciones toman una cadena y un argumento opcional para la cantidad de caracteresa extraer, 1 es por defecto 
+
+- LEFT () extrae caracteres comenzando del lado izquiero 
+RIGHT () extrae caracteres comenzando del lado derecho 
+
+
+## Combinar LEN, SEARCH, LEFT, RIGHT
+
+Ejemplo: de una lista de nobres de ciudades,estados extraer el estado(se ubica del lado derecho), los datos estan separados por una coma 
+
+=RIGHT(A2, LEN(A2) - SEARCH(",", A2))  --> funcion anidada, donde lo de adentro se ejecuta primero, se pone LEN porque no todas las filas tienen la misma
+cantidad de caracteres y se resta por la posicion de la "," en cada cadena de texto. 
+
+
+# Funcion SUBSTITUTE() -> tiene 3 parametros obligatorios y 1 parametro opcional (ocurrence_number) que es el numero de veces que aparece la cadena en 
+la lista 
+
+* text_to_search: texto a buscar 
+* search_for: cadena de texto a buscar
+* replace_with: reemplazar con X cadena 
+
+=SUBSTITUTE("I LIKE datacamp", "LIKE", "LOVE") --> esto devuelve I LOVE datacamp 

@@ -1,0 +1,66 @@
+Columnas -> etiquetados con letras 
+Filas -> etiquetadas con numeros 
+Celdas -> contienen los valores 
+
+Rangos de una columna  A1:A5 
+
+Rangos en varias columnas -> A:E5 -- Esto marca toda la columna A hasta la fila 5 y marca de la A a la E 
+
++ - * / ---> operaciones 
+^ --> exponenciacion 
+() -> indican el orden de la operacion 
+
+### Orden de operaciones en excel/sheets 
+
+1. () parentesis
+2. ^ exponentes 
+3. * y / multiplicacion y division 
+4. + y - suma y resta
+
+' -> antes de la formula la forza a convertirse en un texto, tambien funciona para numeros o porcentajes que quieran marcarse como un texto sin formato 
+Sintaxis: 
+'= 2+3
+
+'21% 
+
+'23
+
+### Operadores logicos 
+< menor 
+<= menor o igual que 
+> mayor 
+>= mayor que
+= igual 
+<> no igual 
+
+### Referencias de celda ### --> F4 para alternar entre los distintos tipos de referencia 
+
+Nos ayuda a ingresar valores de determinada celda e ingresarlas de manera automatica sin cometer errores.  
+
+Errores circulares -> cuando referenciamos una celda por si misma, es decir, selecciono A2 y referencio por =A2, esto genera un bucle donde no hay valores 
+solo una referencia por si misma, de igual forma al seleccionar una celda E2, la cual contiene la referencia =A2, y en A2 referenciamos la columna E2
+genera el mismo error circular. 
+
+
+### Referencias relativas ### 
+Referenciamos una celda a otra celda, por ejemplo en E2 =A2 
+
+## Referencias absolutas ## 
+No cambian cuando se copian en otras celdas, siempre apuntaran a la misma celda. 
+
+Se utilizan signos de dolar donde el primer signo bloquea la columna y el segundo bloquea la fila, por ejemplo:  =$B$7 
+
+se bloquea la columna B y la fila 7 -> esto evita que la referencia se desplace en cualquier direccion cuando se copia la formula 
+
+
+## Referencias absolutas parciales ##
+Solo pueden cambiar cuando se copian en una direccion especifica 
+
+fijar filas --> La fila está fija (1), pero la columna (A) puede cambiar.
+
+sintaxis: 
+A$2 -> esto bloquea solo la fila 2, y al copiar en otra columna utilizara B$2, es decir, se movera a lo largo de la fila 2 pero desplazandose a la derecha
+
+Fijar columnas --> si se referencia un valor en otra celda el valor siempre sera el mismo. La columna está fija (A), pero la fila puede cambiar.
+Sintaxis:
+$A2 --> si esto se copia en B5 el valor de $A2 siempre sera el mismo 

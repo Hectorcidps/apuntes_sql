@@ -1,0 +1,94 @@
+## Funciones condicionales ###
+Las funciones condicionales devuelven valores diferentes dependiendo de si se cumple un conjnuto de criterios logicos 
+
+# funcion IF()
+devuelve valores basados en expresiones logicas
+
+Sintaxis:
+=IF(columna1 expresion_logica columna2, valor_true,valor_false)
+
+    AND() si todas las condiciones son verdaderas 
+    OR() si al menos una condicion es verdadera 
+
+### combinar condiciones con IF 
+Sintaxis:
+
+=IF(AND(A2>=B2, A2>1000), "exito", "sin exito")  -> puede tener una sola condicion, 2 o mas. 
+
+
+# ejercicio plataforma:
+En la Weekendcolumna, utilice la WEEKDAY()función y una función lógica para devolver TRUE si Day es un fin de semana (sábado o domingo) y 
+FALSE en caso contrario.
+
+=OR(WEEKDAY(B14)= 7, WEEKDAY(B14)=1) -> no se escribe true o false, ya que OR lo da por default 
+
+
+
+### IF con funciones de agregacion ##
+las funciones de agregacion mos permiten calcular estadisticas de resumen basadas en nuestras condiciones 
+
+* COUNTIF(rango, criterio) --> util si tenemos UN SOLO criterio o condicion 
+- cuenta las celdas en un rango especifico que coumple con cierto criterio 
+la funcion acepta strings, numeros o strings con numeros precedido de un operador de comparacion, e.g. ">9"
+
+Sintaxis:
+=COUNTIF(A2:A, ">100")
+
+* COUNTIFS(rango1, criterio_1, rango2, criterio_2)
+- Similar a COUNTIF con la gran diferencia que acepta multiples rangos, y si se cumplen TODOS los criterios o condiciones, se cuenta la fila.
+
+Sintaxis:
+=COUNTIFS(A2:A, ">10", B2:B, "<12") --> esto devuelve el conteo de las filas que cumplen con las DOS condiciones 
+
+
+* SUMIF(rango, criterio)
+Similar al COUNTIF solo que agrega usando la SUMA en lugar del conteo. cuenta con un parametro extra [sum_range], sirve para espeficar un rango
+diferente para sumar. 
+
+Sintaxis con sum_range: 
+    =SUMIF(A2:A, ">100", B2:B) --> esto devuelve la suma de los valores de la columna B que superen los 100 de la columna A.  
+
+
+* SUMIFS(rango1, criterio_1, rango2. criterio_2)
+Similar a COUNTIFS nos permite agregar o sumar en funcion de miltiples criterios o condiciones, la DIFERENCIA es que el argumento sum_range debe
+especificarse PRIMERO.  
+
+Sintaxis:
+=SUMIFS(A2:A, A2:A, ">1000", B2:B, "<120") 
+
+
+* AVERAGEIF(rango,criterio_1) 
+- similar al COUNTIF y SUMIF, solo que la agregacion es el promedio 
+
+Sintaxis:
+=AVERAGEIF(A2:A, ">100", B2:B)
+
+
+* AVERAGEIFS(rango1, criterio_1, rango2, criterio_2)
+- similar al COUNTIFS y SUMIFS, solo que la agregacion es el promedio 
+
+Sintaxis:
+=AVERAGEIFS(A2:A,A2:A, ">100", B2:B, ">200")
+
+
+
+### VLOOKUP - BUSCARV ### mantener una relacion entre distintas tablas reduce la cantidad de informacion redundante 
+
+- buscar valores verticalemente en una tabla basandose en una clave de busqueda, se usa comunmente para AGREGAR informacion a una tabla que esta 
+presente en otra tabla. 
+
+* Tabla principal: donde se almacenara la informacion buscada 
+* Tabla de busqueda: su nombre lo indica 
+
+VLOOKUP toma 3 argumentos obligatorios y 1 opcional 
+- clave de busqueda: el valor de la tabla principal que debemos usar en la tabla de busqueda 
+- rango: usualmente se usan referencias absolutas 
+- indice: indica el numero de columna que debe devolver 
+- is_sorted (opcional) TRUE / FALSE dependiendo si la tabla esta ordenada
+
+Sintaxis:
+
+=VLOOKUP(A2, $A$12:$E$20, 4, FALSE) ---> esto devuelve los valores de la columna 4 o D del rango seleccionado, agregar el FALSE o TRUE es necesario,
+sino habra un error con la busqueda. 
+
+Si se busca asignar una calificacion establecida por rangos aplicar el parametro is_sorted en TRUE asignara correctamente los valores. 

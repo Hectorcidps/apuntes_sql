@@ -1,0 +1,78 @@
+### Comprobaciones de tipos de datos ###
+
+- ISNUMBER() -> checa que las celdas contengan numeros con un valor booleano TRUE / FALSE 
+- ISTEXT() TRUE / FALSE
+- ISDATE() TRUE / FALSE
+- ISLOGICAL() TRUE / FALSE
+- ISURL() - revisa si un texto es una URL  
+- ISFORMULA() - revisa su la celda contiene una formula 
+
+--- Comandos para copiar formulas a celdas vacias ---
+Seleccionar celda con formula > seleccionar celdas vacias > cmd + R para copiar a la DERECHA
+Seleccionar celda con formula > seleccionar celdas vacias > cmd + D para copiar hacia abajo  
+
+
+### TO_() ###
+convierte un numeroo texto a porcentaje, fecha, texto, dollar, numero   
+
+Sintaxis:
+
+=TO_DOLLARS(column)
+
+
+### funcion N() ###
+convertir un texto a numero, convertir un valor logico a numero. 
+
+Sintaxis: 
+=N(column) convierte la columna segun el input que se le de, si es texto devuelve numero, si es booleano devuelve numero. 
+
+
+### CONVERT() ### 
+permite cambiar las unidades de un numero (temperaturas, pesos, disntancias, tiempos, entre otras unidades) tiene 3 argumentos:
+
+=CONVERT(numero a convertir, "unidad_actual", "unidad_nueva") 
+
+
+
+###### TRANSFORMACION DE DATOS COMUNES ###### 
+
+LOG10 -> devuelve el numero elevado a 10 potencia 
+=LOG10(column)
+
+LN -> logaritmo natural, logaritmo con base e
+=LN(column)
+
+EXP -> calcula e a la potencia de ese numero 
+=EXP(column)
+
+SQRT -> raiz cuadrada, modelar datos cuadrados
+=SQRT(column)
+
+
+
+
+### Redondeo y formato de numeros ### 
+
+- CEILING -> redondea un numero hacia arriba, sin importar que sea positivo o negativo 
+=CEILING(column, 0.01) -> si se desea agregar una centecima es necesario especificarla, si es una decima 0.1, si son 100 mas se especifica 
+
+=CEILING(A2, 0.1) -> esto aumenta 1 decima al numero 
+
+- FLOOR -> redondea un numero hacia abajo, sin importar que sea positivo o negativo 
+=FLOOR(column, 0.01) -> si se desea quitar una centecima es necesario especificarla, si es una decima 0.1, si son 100 menos se especifica
+
+=FLOOR(B2, 100) -> esto quita 100 del numero seleccionado en la celda 
+
+
+
+### Generar numeros aleatorios ####
+
+=RAND() -> sin argumentos devuelve SOLO un numero aleatorio < - 
+
+=RANDBETWEEN(limite_inferior, limite_superior) -> Genera UN numero aleatorio entre los limites seleccionados, solo da numeros ENTEROS 
+
+=NORMINV(RAND(), 0, 1)  -> funcion de districucion acumulativa inversa normal, donde:
+
+RAND() -> genera un numero aleatorio 
+0 es la media
+1 es la desviacion estandar 

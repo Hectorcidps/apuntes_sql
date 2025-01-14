@@ -1,0 +1,32 @@
+### VLOOKUP ###
+unir o fusionar dos conjuntos de datos rectangulares. Simiar al LEFT JOIN.
+La funcion tiene 4 argumentos 
+
+1. Argumento 1 -> el valor que se desea que coincida 
+2. Argumento 2 -> rango del conjunto de datos en donde queremos encontrar valores, referencias absolutas
+3. Argumento 3 -> columna que contiene los valores que se fusionaran 
+4. Argumento 4 -> TRUE / FALSE los valores se encuentran ordenados 
+
+Sintaxis:
+=VLOOKUP(A2, $A$2:$C$5, 2, FALSE)
+
+
+### SORT ###
+Ordena los datos por X columna. Esta funcion toma 3 argumentos:
+
+1. Rango de valores con referencias absolutas
+2. La columna por cual ordenar
+3. Ordenamiento Ascendente = TRUE, Descendente = FALSE.
+
+Sintaxis:
+=SORT($A$2:$G$45,3,TRUE)
+
+
+### MATCH ###
+permite encontrar valores en un conjunto de datos ordenados. Se necesitan 3 argumentos. Devuelve la POSICION del valor buscado 
+
+1. El valor a encontrar
+2. La columna donde esta el valor, sin embargo, se puede utilizar tambien un rango rectangular. 
+3. 1 los datos estan ordenados Ascendentemente, -1 los datos estan ordenados Descendentemente, 0 buscar coincidencia exacta 
+
+=MATCH(1000, $A$2:$A$4, -1) -> esto busca el valor, en el rango especificado y los datos estan ordenados Descendentemente. 

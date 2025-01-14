@@ -1,0 +1,32 @@
+### funciones para celdas en blanco ##
+
+ISBLANK() -> muestra si la columa es FALSE o TRUE 
+COUNTBLANK() -> cuenta el total de celdas en blanco en una columna
+
+-> si hay valores en blanco y se intenta hacer un calculo se obtendra una respuesta incorrecta, ya que toma la columna en blanco como 0 
+y si se esta sumando reinicia la cuenta, 
+
+por ejemplo se lleva la cuenta de 10 de la fila A2 a A3y la celda A4 esta en blanco entonces se reinicia a 0
+en A5 hay 2 y A6 3 entonces el resultado sera 5 y no 15. 
+
+A2 5
+A3 5
+A4 0
+A5 2
+A6 3
+=SUM(A2:A6) -> devuelve 5 
+
+---> La mejor forma de controlar los valores en blanco es convirtiendolos en NA()
+Si se utiliza AND y hay valores en blanco los tomara como TRUE, por lo cual es necesario convertirlos para que no sean considerados como TRUE
+
+=IF(ISBLANK(A2), NA(), A2) -> lo que hace es evaluar si A2 esta en blanco si esta se convierte en NA, si no devuelve el valor de A2. 
+
+
+
+# ISERROR -> comprueba si hay errores en la columna. Los valores en blanco NO se cuentan como errores los valores ausentes SI. 
+
+Sintaxis: 
+=ISERROR(columna)
+
+# ISERR() -> prueba errores en las celdas, pero no considera que los valores ausentes sean errores 
+=ISERR(columna)

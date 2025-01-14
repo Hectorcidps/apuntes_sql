@@ -1,0 +1,104 @@
+### Subconsultas  ###
+Una consulta anidada en otra consulta. Son utiles por que a menudo, para recuperar la informacion se deben realizar algunas transformaciones 
+inmediatas a los datos antes de seleccionar, filtrar o calcular informacion.
+
+Pueden ser escritas en cualquier parte de la consulta, ya sea en la clausula 
+SELECT
+FROM
+WHERE 
+GROUP BY 
+
+El lugar depende de como se desee que se vean los datos finales. Una subconsulta puede devolver: 
+
+- numeros escalares o numeros enteros 3.1426, -2, 0.001
+- una lista para filtrar o unir informacion
+- una tabla para extraer o transformas aun mas los datos 
+
+# porque las subqueries 
+Estas permiten comparar valores resumidos con datos detallados. Tambien permiten combinar datos de tablas donde no se puede realizar una UNION.
+
+### subquerie simple
+
+-> es una consulta anidada dentro de otra consulta, que se puede ejecutar por si sola. Es decir lo que va a dentro al ejecutar regresa un resultado,
+la subqueri se ejecuta primero, SQL obtiene la informacion que necesita y luego pasa a procesar la informacion en la consulta externa. 
+
+
+#### SUBQUERIES EN WHERE ####
+Son utiles para filtrar resultados segun la informacion que tendria que calcular por separado. Tambien funciona para generar una lista de filtrados
+-> solo pueden devolver una sola columna 
+
+Sintaxis: 
+
+SELECT
+    column
+FROM
+    table_1
+WHERE columna_tabla1 IN
+	  (SELECT 
+        columna_tabla2 
+       FROM 
+        tabla_2
+       WHERE columna_tabla2 >=, <=, <,> x_valor);
+
+
+#### SUBQUERIES EN FROM ####
+
+Herramienta reobusta para reestructurar y transformar los datos. Prefiltrarlos antes de realizar calculos. Tambien son uiles al calcular agregados
+de informacion agregada.
+- > Tiene la capacidad de crear mas de una subconsulta en la clausula FROM de cualquier consulta principal. 
+- > Nombrar la subconsulta 
+- > Unirlos 
+- >  se puede unir la subquery a cualquer tabla en FROM, siempre y cuando se tenga una columna en comun. 
+
+
+Ejemplo: 
+
+SELECT
+    country,
+    subq.date,
+    subq.home_goal,
+    subq.away_goal
+FROM
+	(SELECT c.name AS country, 
+     	    m.date, 
+     		m.home_goal, 
+     		m.away_goal,
+           (m.home_goal + m.away_goal) AS total_goals
+    FROM match AS m
+    LEFT JOIN country AS c
+    ON m.country_id = c.id) AS subq
+WHERE total_goals >= 10;
+
+
+#### SUBQUERIES EN SELECT ####
+- Se utilizan para devolver un unico valor agregado. 
+- Son utiles por que no se pueden incluir valores agregados en una consulta si no esa agrupada.
+- Se usan para calculos matematicos complejos sobre la informacion de un conjunto de datos 
+- Son utiles para los calculos con datos que se estan consultando 
+
+## Consideraciones al usar subqueries en SELECT
+- la subconsulta siempre devuelve un valor unico 
+- si el resultado devuelve varias filas, toda la consulta generara un error, esto se debe a que la info recuperada en una consulta SELECT
+    se aplica de manera identica a cada fila  y eso no es posinle si hay mas de una unidad de informacion. 
+- Estar seguro de que todos los filtros estan en el lugar correcto, tanto en la subquerie como en la principal 
+
+Ejemplo: 
+
+SELECT 
+	l.name AS league,
+    ROUND(AVG(home_goal + m.away_goal), 2) AS avg_goals,
+    (SELECT 
+        ROUND(AVG(home_goal + away_goal), 2) 
+     FROM 
+        match
+     WHERE 
+        season = '2013/2014') AS overall_avg
+FROM
+    league AS l
+LEFT JOIN 
+    match AS m
+ON l.country_id = m.country_id
+WHERE 
+    m.season = '2013/2014'
+GROUP BY 
+    league;
