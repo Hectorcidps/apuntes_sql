@@ -102,3 +102,70 @@ WHERE
     m.season = '2013/2014'
 GROUP BY 
     league;
+
+
+
+### Multiples subconsultas en una consulta ###
+-> Para escribir un codigo legible es necesario alinear correctamente los comandos, esto mantiene las buenas practicas por que se puede determinar
+si el codigo forma parte de la consulta principal o de una subconsulta.
+
+-> anotar comentarios /* para comentarios de varias lineas */, -- para comentarios en una linea   
+
+-> identar correctamente las subqueries 
+
+-> al ejecutar una subconsulta esta puede variar en su tiempo de ejecucion dependiendo del tamaño del dataset 
+
+
+ejemplo de multiples subconsultas dentro de una consulta: 
+
+SELECT 
+	stage,
+    ROUND(s.avg_goals,2) AS avg_goal,
+    (SELECT AVG(home_goal + away_goal) FROM match WHERE season = '2012/2013') AS overall_avg
+FROM 
+	(SELECT
+		 stage,
+         AVG(home_goal + away_goal) AS avg_goals
+	 FROM match
+	 WHERE season = '2012/2013'
+	 GROUP BY stage) AS s
+WHERE 
+	s.avg_goals > (SELECT AVG(home_goal + away_goal) 
+                    FROM match WHERE season = '2012/2013');
+
+
+
+### Subconsulas correlacionadas ###
+Las subconsultas correlacionadas son subconsultas que hacen referencia a una o más columnas de la consulta principal. Las subconsultas correlacionadas 
+dependen de la información de la consulta principal para ejecutarse y, por tanto, no pueden ejecutarse por sí solas.
+
+Son un tipo especial de subquery que utiliza valores de la consulta externa para generar los resultados finales. La subquery 
+se vuelve a ejecutar cada vez que una nueva fila en el conjunto de datos final se devuelve, con el fin de generar correctamente cada nueva informacion
+
+Se utilizan para tipos de datos especiales como uniones avanzadas, filtrado y evaluacion de datos.  
+
+--> diferencias entre subqueries simples y subqueries relacionadas:
+
+    Simples:
+    * Se pueden utilizar para extraer, estructurar o filtrar informacion, se pueden ejecutar independientemente de la consulta principal.
+    * Se evalua una vez en toda la instruccion 
+
+    Correlacionada: 
+    * No se puede ejecutar por si sola depende de los valores de la consulta principal 
+    * Se evalua en bucles, una vez por cada fila generada por el conjunto de datos. (Relentizan la consulta, la consulta se recalcula una y otra vez)
+
+ejemplo de una consuta Correlacionada:
+
+SELECT
+    c.name AS country,
+    (SELECT
+        AVG(home_goal + away_goal)
+    FROM 
+        match AS m
+    WHERE
+        m.country_id = c.id
+    ) AS avg_goals
+FROM
+    country AS c
+GROUP BY
+    country; 
