@@ -1,0 +1,46 @@
+### Tablas dinamicas ###
+En el nivel mas basico, las tablas dinamicas se pueden crear a aprtir de cualquier dato que estte en formato de filas y columnas.
+Estas permiten filtrar, ordenar, calcular subtotales y analizar datos de origen 
+
+Las tablas dinamicas muestran los VALORES UNICOS de un campo(columna)
+
+Se pueden agregar varias filas o columnas basta con volver a agregar otra categoria (es el nombre de las columnas)
+
+- Primero agregar una categoria en el campo Filas 
+- Despues agregar una categoria en el campo columnas 
+- Por ultimo agregar una categoria en el campo valor(por default da SUM)
+
+
+### Usando filtros ### 
+- Desplazar a la seccion filtros y seleccionar la categoria por la cual queremos filtrar, solo se selecciona la columna sin embargo no hemos aplicado 
+ningun filtro, por lo cual debemos seleccionar el dato, fecha, nombre, etc. por el cual queremos filtrar. 
+
+- Para filtrar por nombres ponemos las iniciales dentro del cuadro de busqueda despues click en "seleccionar todo" y solo seleccionara aquellos datos con
+la misma cadena de texto en el buscador. 
+
+COUNT -> cuenta valores numericos 
+COUNTA -> cuenta cualquier tipo de dato excepto los valores en blanco
+COUNTUNIQUE -> cuenta todo tipo de datos, menos los blancos y excluye duplicados. 
+MAX
+MIN
+AVERAGE
+MEDIAN 
+PRODUCT -> multiplicara los valores 
+STANDARD DEVIATION
+VARIANCE 
+
+### Campos calculados ###
+campos no existentes, en el conjunto de datos original. Para escribir una formula es necesario usar el nombre tal cual esta escrito en el conjunto 
+de datos original. 
+Tambien acepta otro tipo de operaciones matematicas por ejemplo: 
+=x_campo *5%  --> esto multiplica el valor del campo por el 5%
+
+### Mostrar como ###
+permite mostrar el porcentaje por fila, porcentaje por columna, porcentaje total 
+
+### Drilling down ###
+exploracion profunda, basta con dar doble click en algun dato, esto creara una hoja nueva con todas las filas y columnas de se dato
+creando un subconjunto de datos. 
+
+### Grouping ###
+Para crear una regla de grupo dinamico seleccionar una fila > click derecho > crear regla de grupo dinamico > establecer intervalos de agrupacion 
