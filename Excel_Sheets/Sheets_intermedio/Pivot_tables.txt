@@ -44,3 +44,22 @@ creando un subconjunto de datos.
 
 ### Grouping ###
 Para crear una regla de grupo dinamico seleccionar una fila > click derecho > crear regla de grupo dinamico > establecer intervalos de agrupacion 
+
+
+## Agregar informacion a una tabla previamente construida ###
+Si se agrega informacion en los datos originales se actualizara de forma automatica, sin embargo si la informacion esta fuera del rango seleccionado
+de la pivot table es necesario modificarlo. Esto hara que los datos agregados fuera del rango se agregen a la nueva tabla. 
+
+Para saber cuantos valores en blanco existen podemos usar COUNTA, cuenta los valores NO en blanco que existen dentro de un rango. 
+
+una forma facil de identificar valores ausentes es colocarse en el nombre de la columna presionar cmd + abajo esto llevara al dato faltante 
+
+## Buenas practicas ##
+Nombre columnas deben llevar datos categoricos
+filas y valores datos numericos. 
+
+Las tablas dinamicas son excelentes para RESUMIR GRANDES CANTIDADES DE DATOS. 
+
+Si el conjunto de datos es muy pequeño es mejor usar filtros o subtotales 
+
+Si se necesita un control estricto sobre el formato y diseño, la tabla dinamica es un poco restrictiva. 
