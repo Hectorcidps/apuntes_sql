@@ -1,0 +1,208 @@
+Al trabajar con funciones de agregacion se requiere agrupar los resultados, si no se agrupan NO se puede comparar los valores agregados con datos no agregados. 
+Para evitar esta limitacion existen las funciones de ventana. 
+
+## Funciones Ventana ##
+Son una clase de funciones que realizan calculos en un conjunto de resultados que ya se ha generado denomindo "Ventana" 
+- Usar funciones de ventana para realizar calculos agregados sin tener que agrupar datos (similar a la subconsulta en SELECT)
+- Calcular informacion como totales acomulados, clasificaciones y promedios moviles 
+-- > Lo que las diferencia de las subconsultas SELECT son las diferentes declaraciones que se pueden agregar dentro de la funciones OVER() 
+
+- como funciona, esta clausula le dice a SQL que "Pase este valor agregado sobre este conjunto de resultados existente" --> el resultado es similar a una subconsulta en SELECT 
+mas simple y un tiempo de procesamiento mas rapido 
+
+Ejemplo: cuantos goles son en promedio anotados en cada partido de la temporada 2011/2012 y cual es el promedio total ? 
+
+SELECT
+    date,
+    (home_goal + away_goal) AS goals, 
+    AVG(home_goal + away_goal) OVER() AS overall_avg
+FROM
+    match 
+WHERE 
+    season = '2011/2012';
+
+# RANK # 
+crea una numeracion de columnas del conjunto de datos de mayor a menor, o viceversa, en funcion de la columna que se especifique 
+
+Ejemplo: cual es el rango de partidos segun el numero de goles marcados? 
+
+SELECT
+    date,
+    (home_goal + away_goal) AS goals, 
+    RANK() OVER(ORDER BY home_goal + away_goal DESC) AS goals_rank    ---> creamos una nueva columna con RANK, esto ordena de manera predeterminada de menor a mayor (usamos DESC para invertir)
+FROM 
+    match 
+WHERE 
+    season = '2011/2012';
+
+
+---> consideraciones: las funciones ventanas se procesan DESPUES de la consulta completa, excepto la instrucion ORDER BY FINAL
+--> usa el conjunto de rersultados para calcular la informacion, en lugar de la base de datos directamente 
+--> Disponibles en MySQL, PostgreSQL, Oracle pero NO en SQLite 
+
+
+Ejemplos plataforma: Selecciona el ID del partido, el nombre del país, la temporada, los goles en casa y los goles fuera en las tablas match y country.
+Completa la consulta que calcula el número medio de goles marcados en total y luego incluye el valor agregado en cada fila utilizando una función de ventana.
+
+ SELECT 
+	m.id, 
+    c.name AS country, 
+    m.season,
+	m.home_goal,
+	m.away_goal,
+	AVG(m.home_goal + m.away_goal) OVER() AS overall_avg
+FROM 
+    match AS m
+LEFT JOIN country AS c 
+    ON m.country_id = c.id;
+
+
+Ejemplo OVER + RANK:
+SELECT 
+	l.name AS league,
+    AVG(m.home_goal + m.away_goal) AS avg_goals,
+    RANK() OVER(ORDER BY AVG(m.home_goal + m.away_goal)) AS league_rank
+FROM 
+    league AS l
+LEFT JOIN match AS m 
+    ON l.id = m.country_id
+WHERE 
+    m.season = '2011/2012'
+GROUP BY 
+    l.name
+ORDER BY 
+    league_rank;
+
+
+
+### OVER + PARTITION ###
+PARTITION permite calcular valores s eparados para diferentes categorias establecidas en una particion es una forma de calcular diferentes valores agregados dentro de una columna 
+de datos, y pasarlos a un conjunto de datos, en lugar de calcularlos en diferentes columnas 
+
+Ejemplo: Cuantos goles se marcaron en cada partido y como se comparo eso con el promedio de la temporada? 
+
+SELECT
+    date,
+    (home_goal + away_goal) AS goals, 
+    AVG(home_goal + away_goal) OVER(PARTITION BY season) AS season_avg
+FROM
+    match;
+
+## PARTITION en multiples columnas ## 
+Calcular valores desglosados por varias columnas.
+
+Ejemplo: promedio de goles marcados desglosados por temporada y pais 
+
+SELECT 
+	c.name,
+    m.season,
+    (home_goal + away_goal) AS goals,
+    AVG(m.home_goal + m.away_goal)
+        OVER(PARTITION BY m.season, c.name) AS season_ctry_avg
+FROM 
+    country AS c 
+LEFT JOIN match AS m 
+    ON l.id = m.country_id
+
+
+Obtener los promedios de goles en casa y goles fuera del equipo Legia Warszawa
+
+SELECT
+	date,
+	season,
+	home_goal,
+	away_goal,
+	CASE WHEN hometeam_id = 8673 THEN 'home' 
+		 ELSE 'away' END AS warsaw_location,
+    AVG(home_goal) OVER(PARTITION BY season) AS season_homeavg,
+    AVG(away_goal) OVER(PARTITION BY season) AS season_awayavg
+FROM 
+    match
+WHERE 
+	hometeam_id = 8673
+	OR awayteam_id = 8673
+ORDER BY 
+    (home_goal + away_goal) DESC;
+
+
+Extraer los promedios por cada mes de la temporada 
+
+SELECT 
+	date,
+	season,
+	home_goal,
+	away_goal,
+	CASE WHEN hometeam_id = 8673 THEN 'home' 
+         ELSE 'away' END AS warsaw_location,
+    AVG(home_goal) OVER(PARTITION BY season, 
+         	EXTRACT(month FROM date)) AS season_mo_home,
+    AVG(away_goal) OVER(PARTITION BY season, 
+            EXTRACT(month FROM date)) AS season_mo_away
+FROM 
+    match
+WHERE 
+	hometeam_id = 8673
+    OR awayteam_id = 8673
+ORDER BY    
+    (home_goal + away_goal) DESC;
+
+
+
+### Ventanas deslizantes Sliding windows ###
+Las funciones ventana tambien se pueden usar para calcular informacion que cambia con cada fila subsiguiente en un conjunto de datos. Calculos relativos
+a la fila actual de un conjunto de datos. 
+Un calculo de ventana deslizante puede dividirse en una o mas columnas, al igual que las ventanas NO deslizantes. 
+
+Palabras clave de las Sliding windows son utilizadas para especificar LOS DATOS a utilizar en los calculos 
+
+ROWS BETWEEN <start> AND <finish>
+    PRECEDING - antes de la fila actual (antes de la declaracion se agrega cuantas filas se necesitan)
+    FOLLOWING - despues de la fila actual (antes de la declaracion se agrega cuantas filas se necesitan)
+    UNBOUNDED PRECEDING(Precedente sin limites) - agregar cada fila desde el principio
+    UNBOUNDED FOLLOWING(Siguiente sin limites) - agregar cada fila desde el final 
+    CURRENT ROW - hacer los calculos en la fila actual
+
+Ejemplo: calcular la suma de goles marcados localmente por Man city durante la temporada 2011/2012
+
+SELECT
+	date,
+	home_goal,
+	away_goal,
+    SUM(home_goal)
+        OVER(ORDER BY date ROWS BETWEEN
+            UNBOUNDED PRECEDING AND CURRENT ROW) AS runnunig_total
+FROM
+    match 
+WHERE
+    hometeam_id = 8456 AND season ='2011/2012';
+
+Agregar una columna con el promedio de goles  del equipo FC Utrecht 
+
+SELECT 
+	date,
+	home_goal,
+	away_goal,
+    SUM(home_goal) OVER(ORDER BY date
+         ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total,
+    AVG(home_goal) OVER(ORDER BY date 
+         ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_avg
+FROM match
+WHERE 
+	hometeam_id = 9908 
+	AND season = '2011/2012';
+
+Calcular lo mismo que la anterior solo que se calcula de la fila actual a la mas vieja y de forma descendente 
+
+SELECT 
+	date,
+    home_goal,
+    away_goal,
+    SUM(home_goal) OVER(ORDER BY date DESC
+         ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS running_total,
+    AVG(home_goal) OVER(ORDER BY date DESC
+         ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS running_avg
+FROM 
+    match
+WHERE 
+	awayteam_id = 9908 
+    AND season = '2011/2012';

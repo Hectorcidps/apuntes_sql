@@ -1,0 +1,45 @@
+### Subqueries Anidadas ###
+subconsultas dentro de otra subconsulta 
+
+## el total de goles de cada mes difiere del promedio mensual de goles marcados? 
+
+SELECT
+    EXTRACT(MONTH FROM date) AS month,
+    SUM(m.home_goal + m.away_goal) AS total_goals
+
+    SUM(m.home_goal + m.away_goal) - 
+    (SELECT AVG(goals)
+        FROM (SELECT 
+            EXTRACT(MONTH FROM date) AS month,
+            SUM(home_goal + away_goal) AS goals
+            FROM match 
+            GROUP BY month)) AS avg_diff   ----- > esta subconsulta devuelve un numero [2944.75] que es el promedio de goles al mes y es restada por la 
+            sumatoria de goles en casa y goles fuera al mes 
+FROM
+    match AS m
+GROUP BY 
+    month;
+
+# las subconsultas anidadas pueden estar o no correlacionadas o tambien pueden estar combinadas, es decir, la consulta externa correlacionada y 
+la consulta interna NO o viceversa. 
+
+
+## subqueries anidadas correlacionadas ##
+Cual es el promedio de goles marcados por cada pais en un partido en la temporada 2011/2012?
+
+SELECT
+    c.name AS country,
+    (SELECT AVG(home_goal + away_goal)
+    FROM match AS m
+    WHERE m.country_id = c.id   --- correlacion en la query principal 
+        AND id IN (
+            SELECT    ---- subquery anidada 
+                id
+            FROM 
+                match
+            WHERE
+                season = '2011/2012')) AS avg_goals 
+FROM
+    country AS c
+GROUP BY
+    country;

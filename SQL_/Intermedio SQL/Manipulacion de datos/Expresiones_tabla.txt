@@ -1,0 +1,125 @@
+## Expresiones de tabla comunes (commun table expression) ## 
+Tambien conocidas como CTE, son un tipo especial de subconsulta que se declara antes de la consulta principal
+Sintaxis: 
+
+WITH cte AS (
+    SELECT column_1, column_2
+    FROM table)
+
+En lugar de anidar subconsultas dentro, se declara la cte y luego se hace referencia a esta por su nombre en la declaracion FROM, como si se 
+tratara de otra tabla en la base de datos. 
+El nombre puede ser cualquiera por ejemplo
+
+WITH x_nombre AS (
+    SELECT column_1, column_2
+    FROM table)\
+
+Ejemplo: 
+
+WITH s AS (
+    SELECT country_id, id 
+    FROM match
+    WHERE(home_goal + away_goal) >= 10
+)
+SELECT
+    c.name AS country, 
+    COUNT(s.id) AS matches 
+FROM
+    country as c
+INNER JOIN s 
+ON c.id = s.country_id
+GROUP BY
+    country;
+
+## Se pueden crear mas de un cte a la vez basta con separarlas con una ","
+
+por ejemplo:
+
+WITH s AS (
+    SELECT country_id, id 
+    FROM match
+    WHERE(home_goal + away_goal) >= 10),
+s2 AS (         -- > nombramos la cte y creamos la subquery
+    SELECT country_id, id 
+    FROM match
+    WHERE(home_goal + away_goal) = 10
+)
+---> NO LLEVA COMA AL FINAL 
+
+
+### VENTAJAS DEL CTE ###
+* se ejecuta una sola vez y luego se almacena en la memoria, por lo que a menudo conduce a una mejora en la cantidad de tiempo de ejecucion, 
+son excelentes oara organizar subqueries largas y complejas. 
+* una CTE puede hacer referencia a otras CTEs 
+* una CTE puede hacer referencia a si misma en un tipo especial de tabla llamada CTE recursiva (SELF JOIN)
+
+
+## Diferencias entre las tecnicas vistas ##
+
+--> Join permite combinar 2 o + tablas 
+Es simple 
+permite operaciones/agregaciones
+
+Cual es el total de ventas por empleado ? 
+
+
+--> subqueries correlacionadas
+permite la union de subqueries con subqueries o subqueries con tablas 
+evita los limites de los joins 
+el procesamiento es lento lleva mas tiempo 
+* Son excelentes para hacer coincidir datos de diferentes columnas en una mas tablas 
+
+Quien es el supervisor inmediato de cada empleado en la compañia ? 
+
+
+--> subconsultas multiples o anidadas 
+Son utiles cuano los datos requieren varios pasos de transformacion antes de tener la forma deseada para la consulta final
+Desglozar los pasos permite una mejor precision y repoducibilidad en el trabajo. 
+
+Cual es el tamaño promedio de trato cerrado por cada representante de ventas en el ultimo trimestre ? 
+
+
+--> CTEs 
+permiten organizar secuencialmente declarandolas al comienzo de la consulta 
+las CTEs se procesa uno a la vez antes de la consulta, se pueden hacer referencia a otras CTEs, esto es una alternativa a las subconsultas anidadas 
+
+* Comparar una gran cantidad de informacion dispar. 
+
+Cuale es el desempeño en los equipos de marketing, ventas, crecimiento e ingenieria en el ultimo trimestre? 
+
+Ejemplo CTEs
+
+WITH home AS (
+  SELECT m.id, t.team_long_name,
+	  CASE WHEN m.home_goal > m.away_goal THEN 'MU Win'
+		   WHEN m.home_goal < m.away_goal THEN 'MU Loss' 
+  		   ELSE 'Tie' END AS outcome
+  FROM match AS m
+  LEFT JOIN team AS t 
+    ON m.hometeam_id = t.team_api_id),
+
+away AS (
+  SELECT m.id, t.team_long_name,
+	  CASE WHEN m.home_goal > m.away_goal THEN 'MU Win'
+		   WHEN m.home_goal < m.away_goal THEN 'MU Loss' 
+  		   ELSE 'Tie' END AS outcome
+  FROM match AS m
+  LEFT JOIN team AS t 
+    ON m.awayteam_id = t.team_api_id)
+
+- Consulta con CTEs
+SELECT DISTINCT
+    m.date,
+    home.team_long_name AS home_team,
+    away.team_long_name AS away_team,
+    m.home_goal,
+    m.away_goal
+FROM match AS m
+LEFT JOIN home 
+    ON m.id = home.id
+LEFT JOIN away 
+    ON m.id = away.id
+WHERE 
+    m.season = '2014/2015'
+        AND (home.team_long_name = 'Manchester United' 
+            OR away.team_long_name = 'Manchester United');
