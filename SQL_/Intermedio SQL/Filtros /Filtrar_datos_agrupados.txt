@@ -9,13 +9,14 @@ millones de filas, HAVING te permitirá filtrar solo por el grupo de datos que d
 Sintaxis:
 -- esta consulta muestra los años en los que se estrenaron mas de 10 peliculas -- 
 SELECT 
-    release_year COUNT(title) AS title_count
+    release_year, 
+    COUNT(title) AS title_count
 FROM 
     films 
 GROUP BY
     release_year
 HAVING
-    COUNT(title ) > 10;
+    COUNT(title) > 10;
 
 
 

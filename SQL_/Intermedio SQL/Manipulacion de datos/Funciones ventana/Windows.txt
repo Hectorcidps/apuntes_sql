@@ -7,8 +7,8 @@ Son una clase de funciones que realizan calculos en un conjunto de resultados qu
 - Calcular informacion como totales acomulados, clasificaciones y promedios moviles 
 -- > Lo que las diferencia de las subconsultas SELECT son las diferentes declaraciones que se pueden agregar dentro de la funciones OVER() 
 
-- como funciona, esta clausula le dice a SQL que "Pase este valor agregado sobre este conjunto de resultados existente" --> el resultado es similar a una subconsulta en SELECT 
-mas simple y un tiempo de procesamiento mas rapido 
+- como funciona, esta clausula le dice a SQL que "Pase este valor agregado sobre este conjunto de resultados existente" --> el resultado es 
+similar a una subconsulta en SELECT mas simple y un tiempo de procesamiento mas rapido 
 
 Ejemplo: cuantos goles son en promedio anotados en cada partido de la temporada 2011/2012 y cual es el promedio total ? 
 
@@ -29,7 +29,8 @@ Ejemplo: cual es el rango de partidos segun el numero de goles marcados?
 SELECT
     date,
     (home_goal + away_goal) AS goals, 
-    RANK() OVER(ORDER BY home_goal + away_goal DESC) AS goals_rank    ---> creamos una nueva columna con RANK, esto ordena de manera predeterminada de menor a mayor (usamos DESC para invertir)
+    RANK() OVER(ORDER BY home_goal + away_goal DESC) AS goals_rank    ---> creamos una nueva columna con RANK, 
+    esto ordena de manera predeterminada de menor a mayor (usamos DESC para invertir)
 FROM 
     match 
 WHERE 
@@ -41,8 +42,9 @@ WHERE
 --> Disponibles en MySQL, PostgreSQL, Oracle pero NO en SQLite 
 
 
-Ejemplos plataforma: Selecciona el ID del partido, el nombre del país, la temporada, los goles en casa y los goles fuera en las tablas match y country.
-Completa la consulta que calcula el número medio de goles marcados en total y luego incluye el valor agregado en cada fila utilizando una función de ventana.
+Ejemplos plataforma: Selecciona el ID del partido, el nombre del país, la temporada, los goles en casa y los goles fuera en las tablas match y 
+country. Completa la consulta que calcula el número medio de goles marcados en total y luego incluye el valor agregado en cada fila utilizando 
+una función de ventana.
 
  SELECT 
 	m.id, 
@@ -76,8 +78,8 @@ ORDER BY
 
 
 ### OVER + PARTITION ###
-PARTITION permite calcular valores s eparados para diferentes categorias establecidas en una particion es una forma de calcular diferentes valores agregados dentro de una columna 
-de datos, y pasarlos a un conjunto de datos, en lugar de calcularlos en diferentes columnas 
+PARTITION permite calcular valores separados para diferentes categorias establecidas en una particion es una forma de calcular diferentes 
+valores agregados dentro de una columna de datos, y pasarlos a un conjunto de datos, en lugar de calcularlos en diferentes columnas 
 
 Ejemplo: Cuantos goles se marcaron en cada partido y como se comparo eso con el promedio de la temporada? 
 
@@ -149,12 +151,13 @@ ORDER BY
 
 
 ### Ventanas deslizantes Sliding windows ###
-Las funciones ventana tambien se pueden usar para calcular informacion que cambia con cada fila subsiguiente en un conjunto de datos. Calculos relativos
-a la fila actual de un conjunto de datos. 
-Un calculo de ventana deslizante puede dividirse en una o mas columnas, al igual que las ventanas NO deslizantes. 
+Las funciones ventana tambien se pueden usar para calcular informacion que cambia con cada fila subsiguiente en un conjunto de datos. 
+Calculos relativos a la fila actual de un conjunto de datos. Un calculo de ventana deslizante puede dividirse en una o mas columnas, 
+al igual que las ventanas NO deslizantes. 
 
 Palabras clave de las Sliding windows son utilizadas para especificar LOS DATOS a utilizar en los calculos 
 
+ROW_NUMBER() asigna un numero secuencial unico a cada fila dentro de la particion de datos comenzando por 1. ORDER BY ES OBLIGATORIO al usar ROW_NUMBER
 ROWS BETWEEN <start> AND <finish>
     PRECEDING - antes de la fila actual (antes de la declaracion se agrega cuantas filas se necesitan)
     FOLLOWING - despues de la fila actual (antes de la declaracion se agrega cuantas filas se necesitan)
