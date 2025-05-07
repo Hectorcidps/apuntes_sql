@@ -1,0 +1,26 @@
+El operador BETWEEN en SQL se utiliza para filtrar resultados dentro de un rango específico, incluyendo los valores de los límites.
+
+El operador BETWEEN es particularmente útil para consultas de informes mensuales, trimestrales o cualquier análisis que requiera filtrar 
+por rangos de fechas específicos.
+
+Sintaxis: 
+
+-- Usando comparadores estándar
+SELECT columnas
+FROM tabla
+WHERE fecha_columna >= fecha_inicio 
+  AND fecha_columna <= fecha_fin;
+
+
+Ejemplo:
+SELECT 
+  sender_id,
+  COUNT(DISTINCT(message_id)) AS message_count
+FROM messages
+WHERE 
+  sent_date BETWEEN '08/01/2022
+    AND '08/31/2022'
+GROUP BY 
+  sender_id
+ORDER BY  
+  message_count DESC;

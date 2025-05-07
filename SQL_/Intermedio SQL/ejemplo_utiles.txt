@@ -1,0 +1,67 @@
+### Esta consulta se usa para mostrar el(los) producto(s) mas vendidos y el(los) producto(s) MAS baratos ###
+
+-- Create a CTE named most_ordered and limit the results 
+with most_ordered as (
+    SELECT pizza_id, SUM(quantity) AS total_qty 
+    FROM order_details GROUP BY pizza_id ORDER BY total_qty DESC
+    limit 1
+)
+-- Create CTE cheapest_pizza where price is equal to min price from pizzas table
+, cheapest_pizza as (
+    SELECT pizza_id, price
+    FROM pizzas 
+    WHERE price = (SELECT min(price) FROM pizzas)
+    LIMIT 1
+)
+
+SELECT pizza_id, 'Most Ordered' AS Description, total_qty AS metric
+-- Select from the most_ordered CTE
+FROM most_ordered
+UNION ALL
+SELECT pizza_id, 'Cheapest' AS Description, price AS metric
+-- Select from the cheapest_pizza CTE
+FROM cheapest_pizza
+
+
+--- Esta query calcula el tiempo promedio de cada una de las actividades de snapchat, open es el tiempo que tarda en abrir un mensaje y send el 
+tiempo en que tarda en enviar o contestar un mensaje. En este se usa el Filter ya que se hara el calculo ahi mismo.
+
+SELECT
+  age.age_bucket,
+  ROUND(100.0 * 
+    SUM(ac.time_spent) FILTER(WHERE ac.activity_type ='send') / SUM(ac.time_spent),2) AS send_perc,
+    
+  ROUND(100.0 *
+    SUM(ac.time_spent) FILTER(WHERE ac.activity_type = 'open') / SUM(ac.time_spent),2) AS open_perc
+FROM 
+  activities AS ac 
+INNER JOIN age_breakdown AS age 
+  ON ac.user_id = age.user_id
+WHERE 
+  ac.activity_type IN ('send','open')
+GROUP BY 
+  age.age_bucket;
+
+
+--- es el mismo ejemplo de arriba pero usando CTE y CASE para mayor legibilidad de codigo: 
+
+WITH snaps_statistics AS (
+  SELECT 
+    age.age_bucket, 
+    SUM(CASE WHEN activities.activity_type = 'send' 
+      THEN activities.time_spent ELSE 0 END) AS send_timespent, 
+    SUM(CASE WHEN activities.activity_type = 'open' 
+      THEN activities.time_spent ELSE 0 END) AS open_timespent, 
+    SUM(activities.time_spent) AS total_timespent 
+  FROM activities
+  INNER JOIN age_breakdown AS age 
+    ON activities.user_id = age.user_id 
+  WHERE activities.activity_type IN ('send', 'open') 
+  GROUP BY age.age_bucket
+) 
+
+SELECT 
+  age_bucket, 
+  ROUND(100.0 * send_timespent / total_timespent, 2) AS send_perc, 
+  ROUND(100.0 * open_timespent / total_timespent, 2) AS open_perc 
+FROM snaps_statistics;

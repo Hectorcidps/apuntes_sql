@@ -1,0 +1,189 @@
+Objetivo de crear funciones ventana: Calcular valores corridos o recuperar totales de filas anteriores. 
+
+-- > Las funciones de ventana realizan una operacion en un conjunto de filas (DE LA TABLA ACTUAL) y que tienen una relacion con la fila actual,
+similares a las funciones de agregacion en GROUP BY, PERO en lugar de que se agrupen en una sola fila todas las filas permanecen en el output (salida)
+
+USOS: 
+1. obtener valores anteriores o posteriores a la fila actual. (Calcular mejoras a lo largo del tiempo)
+2. Asignacion de rangos basados en los valores de una lista ordenada
+3. Calcular totales y promedios moviles (dinamicas)
+
+-- lo mas basico con las funciones ventana es asignar numeros de filas, estos permiten hacer referencia a una fila por su posicion o index --
+
+
+##### ROW_NUMBER() #####
+Clausula que se usa con funciones ventana con la finalidad de agregar una columna que asigna un numero a cada fila.
+
+Sintaxis: 
+
+SELECT
+    x_columna,
+    ROW_NUMBER() OVER() AS Row_n
+FROM
+    tabla_1
+WHERE 
+    x_columna (=,>,<,!=) X_valor;
+
+
+-- OVER(puede estar vacio) pero tambien puede usar las siguientes sub-clausulas:
+    * ORDER BY
+    * PARTITION BY 
+    * ROWS/RANGE 
+    * PRECEDING/FOLLOWING/UNBOUNDED
+
+
+######## ORDER BY ##########
+sub-clausula de funciones ventanas, que ordena las filas relacionadas con la fila actual que utilizara la funcion ventana.
+
+Sintaxis:
+
+SELECT
+    x_columna,
+    ROW_NUMBER() OVER(ORDER BY x_columna DESC) AS Row_n
+FROM
+    tabla_1
+WHERE 
+    x_columna (=,>,<,!=) X_valor;
+
+-- Al ordenar por x_columna en orden descendente la fila seleccionada se invierte y el ultimo valor se le asigna 1 --
+
+Ejemplo: columna seleccionada "año"
+
+numeracion acendente 
+2000        1
+2001        2
+2002        3
+
+-- sub-clausula aplicada 
+
+numeracion descendente
+2002        1
+2001        2
+2000        3
+
+
+-->  Se puede ordenar con MULTIPLES columnas como se utiliza normalmente el ORDER BY 
+
+SELECT
+    x_columna,
+    ROW_NUMBER() OVER(ORDER BY x_columna DESC, y_columna ASC ..) AS Row_n
+FROM
+    tabla_1
+WHERE 
+    x_columna (=,>,<,!=) X_valor;
+
+
+El ORDER BY de la funcion ventana ORDENAR EL NUMERO DE LAS FILAS de la nueva columna "Row_n", mientras que el ORDER BY de 
+la consulta principal ordena los datos de la tabla por las columnas elegidas:
+
+SELECT
+    x_columna,
+    ROW_NUMBER() OVER(ORDER BY x_columna DESC, y_columna ASC ..) AS Row_n
+FROM
+    tabla_1
+WHERE 
+    x_columna (=,>,<,!=) X_valor
+ORDER BY
+    a_columna ASC, Row_n DESC; --> en este ejemplo NO ES obligatorio usar la columna "Row_n"
+
+
+
+######### LAG ##########
+toma una columna y un numero n y devuelve el valor de n_filas antes de la fila actual --> compara los resultados de una fila anterior con la actual
+
+-- Si no se asigna un n_numero despues de la columna a comparar en LAG por default es 1 --
+
+--> esta CTE devuelve los campeones de medallas de oro de halterofilia de cada año segun se pais
+
+WITH Weightlifting_Gold AS (
+  SELECT
+    -- Return each year's champions' countries
+    Year,
+    Country AS champion
+  FROM Summer_Medals
+  WHERE
+    Discipline = 'Weightlifting' AND
+    Event = '69KG' AND
+    Gender = 'Men' AND
+    Medal = 'Gold')
+
+-- > la consulta principal utiliza LAG para comparar la columna 'champion' con la fila actual
+
+SELECT
+  Year, Champion,
+  -- Fetch the previous year's champion
+  LAG(Champion,1) OVER  --- > el 1 puede ser remplazado por n_numero este sera el numero de filas que va a retroceder el LAG para comparar con la fila actual
+    (ORDER BY champion ASC) AS Last_Champion
+FROM Weightlifting_Gold
+ORDER BY Year ASC;
+
+Resultado 
+año         champion        last_champion
+2000        BUL                NULL
+2004        CHN                BUL
+2008        CHN                CHN
+
+
+
+
+######### PARTITION BY ##########
+
+Divide la tabla en particiones basados en los valores unicos de una tabla similar al GROUP BY, los resultados NO se unifican en una columna.
+
+PARTITION permite calcular valores separados para diferentes categorias establecidas en una particion. Es una forma de calcular diferentes 
+valores agregados dentro de una columna de datos, y pasarlos a un conjunto de datos, en lugar de calcularlos en diferentes columnas 
+
+Ejemplo: Cuantos goles se marcaron en cada partido y como se comparo eso con el promedio de la temporada? 
+
+SELECT
+    date,
+    (home_goal + away_goal) AS goals, 
+    AVG(home_goal + away_goal) OVER(PARTITION BY season) AS season_avg
+FROM
+    match;
+
+
+
+#### PARTITION en multiples columnas #####
+Calcular valores desglosados por varias columnas.
+
+Ejemplo: promedio de goles marcados desglosados por temporada y pais 
+
+SELECT 
+	c.name,
+    m.season,
+    (home_goal + away_goal) AS goals,
+    AVG(m.home_goal + m.away_goal)
+        OVER(PARTITION BY m.season, c.name) AS season_ctry_avg
+FROM 
+    country AS c 
+LEFT JOIN match AS m 
+    ON l.id = m.country_id
+
+
+Ejemplo: 
+
+--> se extraen los atletas con las siguientes caracteristicas
+
+WITH Athletics_Gold AS (
+  SELECT DISTINCT
+    Gender, Year, Event, Country
+  FROM Summer_Medals
+  WHERE
+    Year >= 2000 AND
+    Discipline = 'Athletics' AND
+    Event IN ('100M', '10000M') AND
+    Medal = 'Gold'
+)
+
+---> se hace una particion de los atletas (por genero y evento) para compararlos(con LAG) y mostrar cual fue el campeon del año pasado con el actual
+SELECT
+  Gender, Year, Event,
+  Country AS Champion,
+  LAG(Country) OVER (PARTITION BY Gender, Event 
+            ORDER BY Year ASC) AS Last_Champion
+FROM Athletics_Gold
+ORDER BY Event ASC, Gender ASC, Year ASC;
+
+
+
