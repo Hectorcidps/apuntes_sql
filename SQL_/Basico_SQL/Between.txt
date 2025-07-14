@@ -11,7 +11,17 @@ FROM tabla
 WHERE fecha_columna >= fecha_inicio 
   AND fecha_columna <= fecha_fin;
 
+-- usando comparadores estándar con numeros enteros o flotantes SIN usar BETWEEN
+SELECT
+  columna 
+FROM
+  tabla 
+WHERE
+  columna >= x_cantidad 
+    AND columna <= x_cantidad 
 
+
+-- Usando clausula BETWEEN
 Ejemplo:
 SELECT 
   sender_id,

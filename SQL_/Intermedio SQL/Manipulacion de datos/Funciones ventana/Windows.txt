@@ -21,7 +21,7 @@ FROM
 WHERE 
     season = '2011/2012';
 
-# RANK # 
+#### RANK ####
 crea una numeracion de columnas del conjunto de datos de mayor a menor, o viceversa, en funcion de la columna que se especifique 
 
 Ejemplo: cual es el rango de partidos segun el numero de goles marcados? 
@@ -76,9 +76,8 @@ ORDER BY
     league_rank;
 
 
-
-
 ### Ventanas deslizantes Sliding windows ###
+
 Las funciones ventana tambien se pueden usar para calcular informacion que cambia con cada fila subsiguiente en un conjunto de datos. 
 Calculos relativos a la fila actual de un conjunto de datos. Un calculo de ventana deslizante puede dividirse en una o mas columnas, 
 al igual que las ventanas NO deslizantes. 
@@ -86,7 +85,8 @@ al igual que las ventanas NO deslizantes.
 Palabras clave de las Sliding windows son utilizadas para especificar LOS DATOS a utilizar en los calculos 
 
 ROW_NUMBER() asigna un numero secuencial unico a cada fila dentro de la particion de datos comenzando por 1. ORDER BY ES OBLIGATORIO al usar ROW_NUMBER
-ROWS BETWEEN <start> AND <finish>
+
+RANGE BETWEEN - ROWS BETWEEN <start> AND <finish>
     PRECEDING - antes de la fila actual (antes de la declaracion se agrega cuantas filas se necesitan)
     FOLLOWING - despues de la fila actual (antes de la declaracion se agrega cuantas filas se necesitan)
     UNBOUNDED PRECEDING(Precedente sin limites) - agregar cada fila desde el principio
@@ -137,3 +137,33 @@ FROM
 WHERE 
 	awayteam_id = 9908 
     AND season = '2011/2012';
+
+######### OBTENCION RELATIVA ########
+Se llaman asi por que el valor obtenido es relativo a la fila actual 
+
+LAG --> Devuelve el valor de n filas antes de la fila actual 
+LEAD --> Devuelve el valor de N filas despues de la fila actual 
+
+---- LEAD(X_columna, 1,2,3,4 depende cuantas filas queremos despues) OVER() -----
+
+--> Cuando ya no hay filas que mostrar el siguiente registro sera NULL <---
+
+####### Obtencion Absoluta ########
+Lo que devuelven NO dependen de la fila actual 
+
+FIRST_VALUE -> obtiene el primer valor de la tabla o particion 
+LAST_VALUE -> obtiene el ultimo valor de la tabla o particion 
+
+--- FIRST_VALUE(X_columna) OVER() --- 
+
+--- LAST_VALUE(X_columna) OVER() ---
+
+--> Cuando ya no hay filas que mostrar el siguiente registro sera NULL <---
+
+
+####### FUNCIONES DE CLASIFICACION ####### 
+
+- ROW_NUMBER() --> asigna un numero a las filas sin importar que sean las mismas, este siempre asignara numeros unicos tomando en cuenta 
+    distintas caracteristicas de la fila.
+
+- RANGE() --> 
