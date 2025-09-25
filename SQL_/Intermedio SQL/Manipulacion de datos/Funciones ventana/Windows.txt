@@ -164,6 +164,47 @@ LAST_VALUE -> obtiene el ultimo valor de la tabla o particion
 ####### FUNCIONES DE CLASIFICACION ####### 
 
 - ROW_NUMBER() --> asigna un numero a las filas sin importar que sean las mismas, este siempre asignara numeros unicos tomando en cuenta 
-    distintas caracteristicas de la fila.
+    distintas caracteristicas de la fila, se pueden utilizar distintas particiones u ordenaciones para desempatar.
+    ejemplo: 
+            pizza       1 
+            pizza       2
+            hamburguesa 3
+            taco        4
+    SINTAXIS: ROW_NUMBER () OVER(PARTITION BY x_columna ORDER BY x_columna ASC/DESC) AS x_nombre --> Puede ir solo con el ORDER BY sin particion  
 
-- RANGE() --> 
+- RANK() --> Asigna el mimo numero a filas con valores identicos, se brinca al siguiente numero si esto sucede
+    ejemplo: 
+            pizza       1 
+            pizza       1
+            hamburguesa 3
+            taco        4
+
+    SINTAXIS: RANK () OVER(PARTITION BY x_columna ORDER BY x_columna ASC/DESC) AS x_nombre --> Puede ir solo con el ORDER BY sin particion  
+
+- DENSE_RANK() --> Asigna el mimo numero a filas con valores identicos, PERO NO se brinca al siguiente numero
+    ejemplo: 
+            pizza       1 
+            pizza       1
+            hamburguesa 2
+            taco        3
+    
+    SINTAXIS: DENSE_RANK () OVER(PARTITION BY x_columna ORDER BY x_columna ASC/DESC) AS x_nombre --> Puede ir solo con el ORDER BY sin particion  
+
+
+
+########## PAGING ###############
+Paging es dividir los datos en fragmentos aprox. iguales, es decir, divide la data en "grupos" que seran numerados con la funcion NTILE(n).
+
+Un ejemplo son las API que devuelven los datos en "Paginas" para reducir el tamaño de los datos que se envian.
+
+---> NTILE(n) es una funcion ventana que toma como entrada n_numeros de divisiones que se deseen y divide la data en "grupos"
+aproximadamente igual cada uno. Con esta funcion se pueden hacer divisiones de Quartiles, con ella se puede saber la distribucion aprox de los datos 
+
+Sintaxis: 
+    SELECT
+        NTILE(10) OVER() AS x_nombre
+    FROM ....
+
+Ejemplo si se tienen 67 libros y se quieren dividir en grupos de 15, no dara como resultado de 4 a 5 filas por grupo, estos seran numerados de 1 a 15.
+
+

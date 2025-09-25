@@ -130,7 +130,7 @@ año         champion        last_champion
 
 Divide la tabla en particiones basados en los valores unicos de una tabla similar al GROUP BY, los resultados NO se unifican en una columna.
 
-PARTITION permite calcular valores separados para diferentes categorias establecidas en una particion. Es una forma de calcular diferentes 
+PARTITION permite calcular valores separados para diferentes categorias establecidas en una particion O GRUPOS. Es una forma de calcular diferentes 
 valores agregados dentro de una columna de datos, y pasarlos a un conjunto de datos, en lugar de calcularlos en diferentes columnas 
 
 Ejemplo: Cuantos goles se marcaron en cada partido y como se comparo eso con el promedio de la temporada? 
