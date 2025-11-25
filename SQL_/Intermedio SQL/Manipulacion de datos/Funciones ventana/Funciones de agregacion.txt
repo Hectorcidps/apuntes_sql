@@ -1,0 +1,97 @@
+Se pueden utilizar ventanas con funciones de agregacion para resumenes estadisticos como totales, maximos, minimos, etc.  
+por ejemplo: quiero saber el numero total de ventas por año:
+
+-- sin particion (sintaxis)
+WITH VENTAS AS (
+    SELECT 
+        AMOUNT,
+        YEAR,
+        MAX(AMOUNT) OVER(ORDER BY YEAR ASC ) AS TOTAL_VENTAS
+    FROM VENTAS
+)
+
+-- Con particion (sintaxis)
+
+WITH VENTAS AS (
+    SELECT 
+        YEAR,
+        AMOUNT,
+        PRODUCT,
+        SUM(AMOUNT) OVER(PARTITION BY PRODUCT ORDER BY YEAR ASC ) AS TOTAL_VENTAS
+    FROM VENTAS
+)
+
+-------->  FRAMES  < ------ 
+
+Un marco simpre comienza con un RANGE BETWEEN o ROWS BETWEEN + [START] AND [FINISH] y este tiene un principio y un final, para el inicio puede ser:
+    
+    - n PRECEDING: n = numero de filas antes de la fila actual
+    - CURRENT ROW: Fila actual 
+    - m FOLLOWING: n = numero de filas despues de la fila actual
+
+--> Si no hay una fila con la cual comparar, entonces la fila se quedara IGUAL, ya sea hacia adelante o hacia atras <--
+
+ejemplos:
+
+ROWS BETWEEN 3 PRECEDING AND CURRENT ROW   --> Este frame comienza TRES filas antes de la actual y termina en la actual
+ROWS BETWEEN 5 PRECEDING AND 1 PRECEDING   --> Este frame comienza CINCO filas antes de la actual y termina UNA fila antes de la actual 
+
+sintaxis:
+
+WITH Scandinavian_Medals AS (
+  SELECT
+    Year, COUNT(*) AS Medals
+  FROM Summer_Medals
+  WHERE
+    Country IN ('DEN', 'NOR', 'FIN', 'SWE', 'ISL')
+    AND Medal = 'Gold'
+  GROUP BY Year)
+
+SELECT
+  -- Select each year's medals
+  year,
+  medals,
+  -- Get the max of the current and next years'  medals
+  MAX(medals) OVER (ORDER BY year ASC
+             ROWS BETWEEN CURRENT ROW
+             AND 1 FOLLOWING ) AS Max_Medals
+FROM Scandinavian_Medals
+ORDER BY Year ASC;
+
+
+
+################ MEDIAS MOVILES Y TOTALES CON FRAMES ################
+
+* Utiles para marcar momentos y tendencias, eliminan la estacionalidad. Podrian calcularse funnels para determinar en que steps o stages se quedo el
+usuario, y se determina la taza de conversion. 
+
+---> Para calcular el porcentaje de cada uno de las filas es necesario comenzar con DOS filas antes, es decir, ROWS BETWEEN 2 PRECEDING AND CURRENT ROW <--
+
+
+
+## DIFERENCIAS ENTRE RANGE BETWEEN Y ROWS BETWEEN ##
+
+RANGE BETWEEN [START] AND [FINISH] -> Considera los DUPLICADOS de la funcion ventana como entidades UNICAS - ROW NO lo hace 
+
+
+ejemplos: 
+
+WITH Russian_Medals AS (
+  SELECT
+    Year, COUNT(*) AS Medals
+  FROM Summer_Medals
+  WHERE
+    Country = 'RUS'
+    AND Medal = 'Gold'
+    AND Year >= 1980
+  GROUP BY Year)
+
+SELECT
+  Year, 
+  Medals,
+  AVG(Medals) OVER
+    (ORDER BY Year ASC
+     ROWS BETWEEN
+     3 PRECEDING AND CURRENT ROW) AS Medals_MA
+FROM Russian_Medals
+ORDER BY Year ASC;
