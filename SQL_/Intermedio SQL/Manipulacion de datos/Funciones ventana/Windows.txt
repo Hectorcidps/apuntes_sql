@@ -208,3 +208,180 @@ Sintaxis:
 Ejemplo si se tienen 67 libros y se quieren dividir en grupos de 15, no dara como resultado de 4 a 5 filas por grupo, estos seran numerados de 1 a 15.
 
 
+
+############### POVITED ###################
+
+Cambiar el sentido de una columna en la tabla, es decir, tranforma a columna los valores unicos de una fila, por ejemplo años, meses ... etc. 
+
+-> Las tablas pivotadas son mas faciles de escanear, especialmente con columnas ordenas cronologicamente (temporalidad) <- 
+
+    -> CROSSTAB - permite pivotar una tabla por una columna determinada 
+
+    Sintaxis:
+
+    CREATE EXTENSION IF NOT EXISTS tablefunc; -> (se ejecuta antes del CROSSTAB)
+    
+    CREATE EXTENSION: hace que las funciones adicionales de una extension esten disponibles para su uso.
+
+    tablefunc -> contiene CROSSTAB
+
+        despues: 
+
+        SELECT 
+            *
+        FROM CROSSTAB($$ source_sql TEXT $$) AS ct (
+            column_1 DATA_TYPE_1,
+            column_2 DATA_TYPE_2,
+            .....
+            columns_n DATA_TYPE_N);
+
+    
+ejemplo:
+
+CREATE EXTENSION IF NOT EXISTS tablefunc;
+
+SELECT * FROM CROSSTAB($$
+  SELECT
+    Gender, Year, Country
+  FROM Summer_Medals
+  WHERE
+    Year IN (2008, 2012)
+    AND Medal = 'Gold'
+    AND Event = 'Pole Vault'
+  ORDER By Gender ASC, Year ASC; -> no olvidar el ;
+$$) AS ct (Gender VARCHAR,
+           "2008" VARCHAR, -> si son numeros poner comillas dobles
+           "2012" VARCHAR)
+
+ORDER BY Gender ASC;
+
+
+## ejemplo con rank: 
+
+CREATE EXTENSION IF NOT EXISTS tablefunc;
+
+SELECT * FROM CROSSTAB($$
+  WITH Country_Awards AS (
+    SELECT
+      Country,
+      Year,
+      COUNT(*) AS Awards
+    FROM Summer_Medals
+    WHERE
+      Country IN ('FRA', 'GBR', 'GER')
+      AND Year IN (2004, 2008, 2012)
+      AND Medal = 'Gold'
+    GROUP BY Country, Year)
+
+  SELECT
+    Country,
+    Year,
+    RANK() OVER
+      (PARTITION BY Year
+       ORDER BY Awards DESC) :: INTEGER AS rank
+  FROM Country_Awards
+  ORDER BY Country ASC, Year ASC;
+$$) AS ct (Country VARCHAR,
+           "2004" INTEGER,
+           "2008" INTEGER,
+           "2012" INTEGER)
+
+Order by Country ASC;
+
+
+############### ROLLUP AND CUBE ######################
+
+ROLLUP -> subclausula de group by permite filas adicionales para agregaciones a nivel de grupo. Es jerarquica, es decir, el orden de 
+los atributos afecta la salida.
+
+Los totales globales por categoria los arroja como NULL, cuando en las columnas aparecen NULL en la misma fila hace referencia al total general.
+
+CUBE -> Es muy parecido a ROLLUP pero NO es jerarquico, genera todas las agregaciones posibles a nivel de grupo. 
+La diferencia con ROLLUP es que mostrara la suma de todas las categorias, dando un total general por categoria y un total global general. Mientras que
+ROLLUP muestra solo el total global general.
+
+---> cuando usar ROLLUP o CUBE ? < ---
+
+- ROLLUP: se usa con datos JERARQUICOS, cuando las agregaciones tengan un sentido (proposito) 
+- CUBE: cuando se necesiten TODAS las agregaciones POSIBLES
+
+ejemplo: 
+
+SELECT
+  Country,
+  Gender,
+  COUNT(*) AS Gold_Awards
+FROM Summer_Medals
+WHERE
+  Year = 2004
+  AND Medal = 'Gold'
+  AND Country IN ('DEN', 'NOR', 'SWE')
+GROUP BY Country, ROLLUP(Gender)
+ORDER BY Country ASC, Gender ASC;
+
+
+SELECT
+  Gender,
+  Medal,
+  COUNT(*) AS Awards
+FROM Summer_Medals
+WHERE
+  Year = 2012
+  AND Country = 'RUS'
+-- Get all possible group-level subtotals
+GROUP BY CUBE(Gender, Medal)
+ORDER BY Gender ASC, Medal ASC;
+
+
+
+############# COALESCE and STRING_AGG ################
+
+COALESCE -> toma una lista y devuelve el primer valor no nulo, va por orden de atributos de izquierda a derecha.
+    Sintaxis:
+
+    COALESCE(primer_valor, segundo_valor) AS X_nombre
+
+ejemplo: 
+
+SELECT
+  COALESCE(Country, 'All countries') AS Country,
+  COALESCE(Gender, 'All genders') AS Gender,
+  COUNT(*) AS Awards
+FROM Summer_Medals
+WHERE
+  Year = 2004
+  AND Medal = 'Gold'
+  AND Country IN ('DEN', 'NOR', 'SWE')
+GROUP BY ROLLUP(Country, Gender)
+ORDER BY Country ASC, Gender ASC;
+
+
+STRING_AGG -> toma todos los valores de una columna y los concatena con un separador entre cada valor, reducir en numero de de filas devueltas
+    Sintaxis:
+
+    STRING_AGG(x_columna, 'separador')  
+
+Ejemplo: 
+
+WITH Country_Medals AS (
+  SELECT
+    Country,
+    COUNT(*) AS Medals
+  FROM Summer_Medals
+  WHERE Year = 2000
+    AND Medal = 'Gold'
+  GROUP BY Country
+  ),
+
+  Country_Ranks AS (
+  SELECT
+    Country,
+    RANK() OVER (ORDER BY Medals DESC) AS Rank
+  FROM Country_Medals
+  ORDER BY Rank ASC
+  )
+
+SELECT STRING_AGG(Country, ', ')
+FROM Country_Ranks
+-- Select only the top three ranks
+WHERE rank <= 3;
