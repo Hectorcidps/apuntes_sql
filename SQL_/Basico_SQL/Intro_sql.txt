@@ -1,0 +1,85 @@
+SQL (LENGUAJE DE CONSULTA ESTRUCTURADO)
+
+Se divide en 4: 
+
+######## Lenguaje de definicion de datos ---> DDL ####
+Se implementan las siguientes clausulas para crear, modificar o eliminar una base se datos, tablas y campos 
+
+- CREATE(Crear) -> crear tablas/vistas de datos 
+- ALTER (Modificar estructura) cambiar una tabla, un tipo de dato de un campo, etc.
+- DROP (Borrar) 
+- TRUNCATE (eliminar contenido de una tabla sin eliminar a la misma)
+
+
+######## Lenguaje de Manipulacion de datos DML ##########
+Permite interactuar con los datos dentro una base de datos 
+
+SELECT (seleccionar campos dentro de una base de datos)
+INSERT (agrega registros a una tabla)
+UPDATE (actualizar o modificar registros dentro de una tabla sin la necesidad de borrarlos)
+DELETE (borrar los REGISTROS de una tabla)
+
+###### Funciones ######
+Son una serie de instrucciones para el gestor de base de datos, en donde reciben una entrada y arrojan una salida. 
+En SQL server, cuando se guarda una funcion esta puede ser utilizada en el SELECT para realizar un calculo repetitivo como el IVA.
+
+---> Funciones escalares: devuelven el valor de cualquier tipo de datos 
+Sintaxis: 
+
+    CREATE FUNCTION nombreFuncion (nombreColumna(parametro) TipodeDato) ---> para el parametro se utiliza @
+    RETURNS TipodeDato
+    AS 
+    BEGIN 
+        CODIGO DE LA FUNCION
+    END
+
+
+----> Funciones en linea y de multiples sentencias en SQL: funciones avanzadas
+
+    ### EN LINEA: son aquellas que devuelven un conjunto de resultados correspondientes a una sentencia SELECT, el resultado es una tabla 
+
+    Sintaxis: 
+
+        CREATE FUNCTION nombreFuncion (nombreColumna(parametro) TipodeDato) ---> para el parametro se utiliza @
+        RETURNS table 
+        RETURN (ESCRIBIR LA QUERY PARA SELECCIONAR CAMPOS Y TABLA)
+
+
+
+    ### EN MULTIPLES LINEAS: similar a la funcion en linea el resultado esta compuesto de ejecuciones de varios SELECT
+
+    Sintaxis(es similar a las funciones escalares): 
+
+    CREATE FUNCTION nombreFuncion (parametro) ---> para el parametro se utiliza @
+    RETURNS definirVariable tabla (estructura de la tabla, pueden ser varios campos a seleccionar, todos con su tipo de dato)
+    AS 
+    BEGIN 
+        CODIGO DE LA FUNCION
+        ejemplo:
+        INSERT INTO @TABLA
+        SELECT todos los campos FROM desde que tabla -- los campos aqui deben estar EN EL MISMO ORDEN QUE LOS DEFINIDOS ARRIBA
+        WHERE paramtro = @parametroEnTabla
+        RETURN
+    END
+
+
+
+######## TRIGGERS (disparadores automaticos) ########
+los triggers estan anclados a una sola base de datos, se pueden usar los comandos INSERT, DELETE y UPDATE, 
+funciona para evitar alteraciones en una tabla 
+
+    Sintaxis:
+
+        CREATE TRIGGER nombreDelTrigger
+        ON 
+        AFTER/FOR --> abajo la diferencia
+            SI se USA AFTER: PRIMERO se ejecuta la instruccion DML y despues el trigger.
+            SI se USA FOR: PRIMERO se ejecuta el trigger y luego la clausula DML. 
+        AS
+        BEGIN 
+            CODIGO DEL TRIGGER (parametro, tipo de dato)
+            agregar UPDATE para actualizar el campo que se esta actualizando
+        END
+    
+    Despues en una query 
+    INSERT INTO tabla(campos) VALUES(en orden segun nuestros campos a actualizar)
